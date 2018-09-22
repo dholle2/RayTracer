@@ -1,1 +1,1 @@
-Utilities folder from Ray Tracing form the Ground Up.
+Framework code from Ray Tracing form the Ground Up.

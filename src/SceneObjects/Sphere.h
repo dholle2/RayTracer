@@ -24,7 +24,7 @@ class Sphere: public GeometricObject {
     set_radius(const double r);
 
     virtual bool
-    git(const Ray& ray, double& t, ShadeRec& s) const;
+    hit(const Ray& ray, double& t, ShadeRec& s) const;
 
   private:
 
@@ -33,3 +33,5 @@ class Sphere: public GeometricObject {
 
     static const double kEpsilon;
 };
+
+#endif

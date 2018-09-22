@@ -9,8 +9,12 @@ class ViewPlane{
     float gamma;
     float inv_gamma;
 
-    set_hres(int h);
-    set_vres(int v);
-    set_s(float size);
-    set_gamma(float g);
-}
+    void set_hres(int h);
+    void set_vres(int v);
+    void set_s(float size);
+    void set_gamma(float g);
+
+    ViewPlane(void);
+};
+
+#endif

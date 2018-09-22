@@ -18,4 +18,6 @@ class Plane: public GeometricObject{
 
     Normal  normal; //plane normal
     static const double kEpsilon;
-}
+};
+
+#endif
