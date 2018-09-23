@@ -29,13 +29,17 @@ World::World(){
 
 void
 World::build(void){
+  background_color = black;
+  tracer_ptr = new MultipleObjects(this);
+  int num_samples = 10;     //samples to use for the sampling
   vp.set_hres(200);
   vp.set_vres(200);
   vp.set_s(0.8);
   vp.set_gamma(1.0);
   pixels.resize(vp.hres * vp.vres); //resize pixels array again
-  background_color = black;
-  tracer_ptr = new MultipleObjects(this);
+  vp.set_sampler(new Multijittered(num_samples));
+
+  //set up camera
   Pinhole* pinhole_ptr = new Pinhole;
   pinhole_ptr->set_eye(300, 400, 500);
   pinhole_ptr->set_eye(300, 400, 500);
@@ -58,7 +62,7 @@ World::build(void){
   add_object(sphere_ptr2);
 
 //add plane
-  Plane* plane_ptr = new Plane(Point3D(0,-20,20), Normal(0,1,0));
+  Plane* plane_ptr = new Plane(Point3D(0,-20,20), Normal(15,15,10));
   plane_ptr->set_color(0,0,1);
 //  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
@@ -143,7 +147,7 @@ World::render_scene_ortho(void){
 
       ray.o = Point3D(x, y, zw);
       pixel_color = tracer_ptr->trace_ray(ray);   //ray tracing!
-      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+  //    cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
       display_pixel(r, c, pixel_color);           //put pixel in list!
     }
   }//end fors
@@ -159,28 +163,29 @@ World::render_scene_ortho(void){
 }//end render
 
 void
-World::render_scene_jittering(void){
+World::render_scene_multijittered(void){
   RGBColor pixel_color;
   Ray ray;
   double zw = 0;
   double x,y;
-  int samples = vp.num_samples;
-  int n = (int) sqrt((float) samples); //10 samples
+  //int samples = vp.sampler_ptr->num_samples;
+  //int n = (int) sqrt((float) samples); //10 samples
+  Point2D sp;
   Point2D pp;
 //populate the pixel array
   for(int r = 0; r < vp.vres; r++){ //vertical
     for(int c = 0; c <= vp.hres; c++){  //horizontal
       pixel_color = black;
 
-      for(int p = 0; p < n; p++){
-        for (int q=0; q<n; q++){
-          pp.x = vp.s * (c - 0.5 * vp.hres + (q + rand_float()) /n);
-          pp.y = vp.s * (r - 0.5 * vp.vres + (p + rand_float()) /n);
+  //    for(int p = 0; p < n; p++){
+        for (int q=0; q< vp.num_samples; q++){
+          sp = vp.sampler_ptr->sample_unit_square();
+          pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
+          pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
           ray.o = Point3D(pp.x, pp.y, zw);
           pixel_color += tracer_ptr->trace_ray(ray);
         }
-      }
-      pixel_color /= samples;
+      pixel_color /= vp.num_samples;
       cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
       display_pixel(r, c, pixel_color);           //put pixel in list!
     }

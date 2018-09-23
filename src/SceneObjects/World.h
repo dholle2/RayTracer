@@ -48,7 +48,7 @@ class World{
     render_scene_ortho(void);
 
     void
-    render_scene_jittering(void);
+    render_scene_multijittered(void);
 
     void
     render_scene_perspective(void);
