@@ -17,12 +17,12 @@ class Material;
 class GeometricObject{
   public:
         //constructors
-
+/*
     Material*
 		get_material(void);
     void
     set_material(Material m);
-    
+  */
     GeometricObject(void);
     GeometricObject(const GeometricObject& object);
     virtual ~GeometricObject(void);
@@ -38,7 +38,7 @@ class GeometricObject{
     void
     set_color(float x, float y, float z);
 
-    mutable Material*   material_ptr;
+//    mutable Material*   material_ptr;
     RGBColor color;
 };
 

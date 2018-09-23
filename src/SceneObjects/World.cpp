@@ -47,26 +47,26 @@ World::build(void){
   sphere_ptr->set_center(15, 10, 0);
   sphere_ptr->set_radius(10.0);
   sphere_ptr->set_color(1,0,0);
-  sphere_ptr->set_material(Matte);
+//  sphere_ptr->set_material(Matte);
   add_object(sphere_ptr);
 
   Sphere* sphere_ptr2 = new Sphere;
   sphere_ptr2->set_center(16, 40, 30);
   sphere_ptr2->set_radius(30.0);
   sphere_ptr2->set_color(.5,0,0);
-  sphere_ptr2->set_material(Matte);
+//  sphere_ptr2->set_material(Matte);
   add_object(sphere_ptr2);
 
 //add plane
   Plane* plane_ptr = new Plane(Point3D(0,-20,20), Normal(0,1,0));
   plane_ptr->set_color(0,0,1);
-  plane_ptr->set_material(Matte);
+//  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
 
   //add triangle
     Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
     triangle_ptr->set_color(1,1,1);
-    triangle_ptr->set_material(Matte);
+//    triangle_ptr->set_material(Matte);
     add_object(triangle_ptr);
 }
 
@@ -111,7 +111,7 @@ World::set_camera(Camera* camera){
       if(objects[j]->hit(ray, t, sr) && (t < tmin)){
         sr.hit_an_object = true;
         tmin = t;
-        sr.material_ptr = objects[j]->get_material();
+  //      sr.material_ptr = objects[j]->get_material();
         sr.hit_point = ray.o + t * ray.d;
         normal = sr.normal;
         local_hit_point = sr.local_hit_point;

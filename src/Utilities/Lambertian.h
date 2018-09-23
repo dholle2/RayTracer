@@ -1,6 +1,7 @@
 
 #ifndef __LAMBERTIAN__
 #define __LAMBERTIAN__
+/*
 
 // 	Copyright (C) Kevin Suffern 2000-2007.
 //	This C++ code is for non-commercial purposes only.
@@ -12,49 +13,49 @@
 
 #include "BRDF.h"
 
-class Lambertian: public BRDF 
+class Lambertian: public BRDF
 {
 	public:
-	
+
 		Lambertian(void);
-		
+
 		Lambertian(const Lambertian& lamb);
-		
-		Lambertian& 
+
+		Lambertian&
 		operator= (const Lambertian& rhs);
-		
+
 		virtual
 		~Lambertian(void);
-		
+
 		virtual Lambertian*
 		clone(void) const;
-		
+
 		virtual RGBColor
 		f(const ShadeRec& sr, const Vector3D& wo, const Vector3D& wi) const;
-		
-		virtual RGBColor												
+
+		virtual RGBColor
 		sample_f(const ShadeRec& sr, const Vector3D& wo, Vector3D& wi, float& pdf) const;
-		
+
 		virtual RGBColor
 		rho(const ShadeRec& sr, const Vector3D& wo) const;
-			
+
 		void
-		set_ka(const float ka);	
-				
+		set_ka(const float ka);
+
 		void
 		set_kd(const float kd);
-		
+
 		void
 		set_cd(const RGBColor& c);
-		
-		void													
+
+		void
 		set_cd(const float r, const float g, const float b);
-		
-		void													
+
+		void
 		set_cd(const float c);
-					
+
 	private:
-	
+
 		float		kd;
 		RGBColor 	cd;
 };
@@ -89,7 +90,7 @@ Lambertian::set_cd(const RGBColor& c) {
 
 // ---------------------------------------------------------------- set_cd
 
-inline void													
+inline void
 Lambertian::set_cd(const float r, const float g, const float b) {
 	cd.r = r; cd.g = g; cd.b = b;
 }
@@ -97,10 +98,11 @@ Lambertian::set_cd(const float r, const float g, const float b) {
 
 // ---------------------------------------------------------------- set_cd
 
-inline void													
+inline void
 Lambertian::set_cd(const float c) {
 	cd.r = c; cd.g = c; cd.b = c;
 }
+*/
 
 #endif
 

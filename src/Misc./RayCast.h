@@ -3,6 +3,7 @@
 
 #include "Tracer.h"
 
+/*
 
 class RayCast: public Tracer {
 	public:
@@ -16,4 +17,5 @@ class RayCast: public Tracer {
 		trace_ray(const Ray ray, const int depth) const;
 };
 
+*/
 #endif

@@ -2,41 +2,41 @@
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
-
+/*
 
 #include "Lambertian.h"
 #include "Constants.h"
 
 // ---------------------------------------------------------------------- default constructor
 
-Lambertian::Lambertian(void) 
+Lambertian::Lambertian(void)
 	:   BRDF(),
-		kd(0.0), 
+		kd(0.0),
 		cd(0.0)
 {}
 
 
 // ---------------------------------------------------------------------- copy constructor
 
-Lambertian::Lambertian(const Lambertian& lamb) 
+Lambertian::Lambertian(const Lambertian& lamb)
 	:   BRDF(lamb),
-		kd(lamb.kd), 
+		kd(lamb.kd),
 		cd(lamb.cd)
 {}
 
 
 // ---------------------------------------------------------------------- assignment operator
 
-Lambertian& 
+Lambertian&
 Lambertian::operator= (const Lambertian& rhs) {
 	if (this == &rhs)
 		return (*this);
-		
+
 	BRDF::operator= (rhs);
-	
-	kd = rhs.kd; 
+
+	kd = rhs.kd;
 	cd = rhs.cd;
-	
+
 	return (*this);
 }
 
@@ -48,10 +48,10 @@ Lambertian::~Lambertian(void) {}
 
 // ---------------------------------------------------------------------- clone
 
-Lambertian* 
+Lambertian*
 Lambertian::clone(void) const {
 	return (new Lambertian(*this));
-}	
+}
 
 
 // ---------------------------------------------------------------------- f
@@ -71,19 +71,19 @@ Lambertian::f(const ShadeRec& sr, const Vector3D& wo, const Vector3D& wi) const 
 
 RGBColor
 Lambertian::sample_f(const ShadeRec& sr, const Vector3D& wo, Vector3D& wi, float& pdf) const {
-	
+
 	Vector3D w = sr.normal;
 	Vector3D v = Vector3D(0.0034, 1, 0.0071) ^ w;
 	v.normalize();
 	Vector3D u = v ^ w;
-	
-	Point3D sp = sampler_ptr->sample_hemisphere();  
+
+	Point3D sp = sampler_ptr->sample_hemisphere();
 	wi = sp.x * u + sp.y * v + sp.z * w;
-	wi.normalize(); 	
-	
+	wi.normalize();
+
 	pdf = sr.normal * wi * invPI;
-	
-	return (kd * cd * invPI); 
+
+	return (kd * cd * invPI);
 }
 
 
@@ -95,4 +95,4 @@ Lambertian::rho(const ShadeRec& sr, const Vector3D& wo) const {
 	return (kd * cd);
 }
 
-
+*/

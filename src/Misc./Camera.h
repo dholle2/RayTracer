@@ -20,7 +20,7 @@ class Camera{
 
 
     virtual void
-		render_scene(const World& w) =0;
+		render_scene(World& w) =0;
     void
 		set_eye(const Point3D& p);
 		void

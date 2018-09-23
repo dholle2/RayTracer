@@ -3,13 +3,13 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
+/*
 #include "Constants.h"
 #include "BRDF.h"
 
 // ---------------------------------------------------------- default constructor
 
-BRDF::BRDF(void) 
+BRDF::BRDF(void)
 	: sampler_ptr(NULL)
 {}
 
@@ -18,19 +18,19 @@ BRDF::BRDF(void)
 
 BRDF::BRDF (const BRDF& brdf) {
 	if(brdf.sampler_ptr)
-		sampler_ptr	= brdf.sampler_ptr->clone(); 
+		sampler_ptr	= brdf.sampler_ptr->clone();
 	else  sampler_ptr = NULL;
-}	
+}
 
 
 
 // --------------------------------------------------------------- assignment operator
 
-BRDF&														
+BRDF&
 BRDF::operator= (const BRDF& rhs) {
 	if (this == &rhs)
 		return (*this);
-		
+
 	if (sampler_ptr) {
 		delete sampler_ptr;
 		sampler_ptr = NULL;
@@ -50,7 +50,7 @@ BRDF::~BRDF(void) {
 		delete sampler_ptr;
 		sampler_ptr = NULL;
 	}
-}  
+}
 
 
 
@@ -87,10 +87,11 @@ BRDF::sample_f(const ShadeRec& sr, const Vector3D& wo, Vector3D& wi, float& pdf)
 }
 
 
-// ------------------------------------------------------------------------ rho	
-	
+// ------------------------------------------------------------------------ rho
+
 RGBColor
 BRDF::rho(const ShadeRec& sr, const Vector3D& wo) const {
 	return (black);
 }
 
+*/

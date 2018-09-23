@@ -17,12 +17,13 @@ class Tracer {
     virtual RGBColor
     trace_ray(const Ray& ray) const;
 
+/*
 		virtual RGBColor
 		trace_ray(const Ray ray, const int depth);
 
 		virtual RGBColor
 		trace_ray(const Ray ray, float& tmin, const int depth);
-
+*/
     virtual
     ~Tracer(void);
   protected:
