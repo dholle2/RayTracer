@@ -38,7 +38,8 @@ ViewPlane::set_sampler(Sampler* sp){
   cout << "Setting Sampler!" << endl;
   if(sampler_ptr != NULL){
     cout << "about to delete sampler_ptr!" << endl;
-    delete sampler_ptr;
+    //delete sampler_ptr;
+    cout << "sampler_ptr deleted!" << endl;
     sampler_ptr = NULL;
   }
   num_samples = sp->get_num_samples();

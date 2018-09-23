@@ -15,6 +15,7 @@
 #include "Directional.h"
 #include "../Misc./MultipleObjects.h"
 #include "../Misc./Pinhole.h"
+#include "../Misc./Multijittered.h"
 
 #include <iostream>
 using namespace std;
@@ -213,7 +214,7 @@ World::render_scene_perspective(void){
   for(int r = 0; r < vp.vres; r++){ //vertical
     for(int c = 0; c <= vp.hres; c++){  //horizontal
       ray.d = Vector3D(vp.s * (c - 0.5 * (vp.hres - 1.0)),
-        vp.s * (r - 0.5 * (vp.vres - 1.0)), 60);    //last is eye dist from screen
+        vp.s * (r - 0.5 * (vp.vres - 1.0)), 30);    //last is eye dist from screen
       ray.d.normalize();
       pixel_color = tracer_ptr->trace_ray(ray);
       cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
