@@ -32,11 +32,29 @@ class Sampler {
     void
     shuffle_samples(void);
 
+		void
+		map_samples_to_unit_disk(void);
+		void
+		map_samples_to_hemisphere(const float p);
+		void
+		map_samples_to_sphere(void);
+
+		Point2D
+		sample_unit_disk(void);
+		Point3D
+		sample_hemisphere(void);
+		Point3D
+		sample_sphere(void);
+
     int 		num_samples;
 		int 		num_sets;
 		vector<Point2D>			samples;
 		vector<int>				shuffled_indices;
     unsigned long 	count;
 		int 		jump;
+
+		vector<Point2D>			disk_samples;	
+		vector<Point3D> 		hemisphere_samples;
+		vector<Point3D> 		sphere_samples;
 };
 #endif
