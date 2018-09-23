@@ -59,7 +59,3 @@ ShadeRec::~ShadeRec(void) {
 		material_ptr = NULL;
 	}
 }
-		
-		
-						
-		

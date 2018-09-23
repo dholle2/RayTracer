@@ -7,6 +7,7 @@ ViewPlane::ViewPlane(void)
   s = 1;
   gamma = 1;
   inv_gamma = 1;
+  num_samples = 10;
 }
 
 void

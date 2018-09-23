@@ -2,7 +2,7 @@
 
 Camera::Camera(void)
 	:	eye(0, 0, 500),
-		target(0),
+		lookat(0),
 		up(0, 1, 0),
 		u(1, 0, 0),
 		v(0, 1, 0),
@@ -14,7 +14,7 @@ Camera::~Camera(void)
 
 void
 Camera::compute_uvw(void){
-  w = eye - target;
+  w = eye - lookat;
   w.normalize();
   u = up ^ w;
   u.normalize();
@@ -35,14 +35,14 @@ Camera::compute_uvw(void){
   }
 
   void
-  Camera::set_target(const Point3D& x){
-    target = x;
+  Camera::set_lookat(const Point3D& x){
+    lookat = x;
   }
   void
-  Camera::set_target(const float x, const float y, const float z){
-    target.x = x;
-    target.y = y;
-    target.z = z;
+  Camera::set_lookat(const float x, const float y, const float z){
+    lookat.x = x;
+    lookat.y = y;
+    lookat.z = z;
   }
 
   void

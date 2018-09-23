@@ -8,6 +8,7 @@ class ViewPlane{
     float s; //size
     float gamma;
     float inv_gamma;
+    int num_samples;
 
     void set_hres(int h);
     void set_vres(int v);

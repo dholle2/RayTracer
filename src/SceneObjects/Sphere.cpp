@@ -44,6 +44,9 @@ const double Sphere::kEpsilon = .001;
   bool
   Sphere::hit(const Ray& ray, double& tmin, ShadeRec& sr) const {
   	double 		t;
+//    cout << "ox " << ray.o.x << " oy " << ray.o.y << " oz " << ray.o.z << " " << ray.d.x << ray.d.y << ray.d.z << endl;
+//    cout << "SPHERE: x " << center.x << " y " << center.y << " z " << center.z << " <- center radius -> ";
+//    cout << radius << endl;
   	Vector3D	temp 	= ray.o - center;
   	double 		a 		= ray.d * ray.d;
   	double 		b 		= 2.0 * temp * ray.d;

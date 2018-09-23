@@ -9,6 +9,7 @@ class Plane: public GeometricObject{
 
     Plane(void);
     Plane(const Point3D& p, const Normal& n);
+//    Plane(const Point3D& p, double x, double y, double z);
     virtual bool
     hit(const Ray& ray, double& t, ShadeRec& s) const;
 

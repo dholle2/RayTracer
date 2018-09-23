@@ -7,6 +7,8 @@
 #include "../Utilities/RGBColor.h"
 #include "GeometricObject.h"
 #include "../Misc./Tracer.h"
+#include "Light.h"
+#include "../Misc./Camera.h"
 //#include "../Misc./BuildRedSphere.h"
 
 using namespace std;
@@ -21,18 +23,35 @@ class World{
     Tracer* tracer_ptr;
     vector<GeometricObject*> objects;
     vector<RGBColor> pixels;
+    vector<Light*> lights;
+    Camera* camera_ptr;
+
+    void
+    set_camera(Camera* camera);
 
     void
     add_object(GeometricObject* object_ptr);
 
+    void
+    add_light(Light* light_ptr);
+
     ShadeRec
     hit_bare_bones_objects(const Ray& ray);
+
+    ShadeRec
+    hit_objects(const Ray& ray);
 
     void
     build(void);
 
     void
-    render_scene(void);
+    render_scene_ortho(void);
+
+    void
+    render_scene_jittering(void);
+
+    void
+    render_scene_perspective(void);
 
     void
     open_window(const int hres, const int vres) const;

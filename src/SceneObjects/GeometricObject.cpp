@@ -9,6 +9,17 @@
   : color(object.color)
   {}
 
+  Material*
+  GeometricObject::get_material(void) {
+  	return (material_ptr);
+  }
+
+  void
+  GeometricObject::set_material(Material m) {
+  	material_ptr = m;
+  }
+
+
   GeometricObject::~GeometricObject(void)
   {}
 

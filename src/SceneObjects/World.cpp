@@ -1,17 +1,20 @@
 
 #include <fstream>    //for file saving
 #include "../Utilities/Constants.h"
-
+#include "../Utilities/Maths.h"
 #include "../Utilities/Vector3D.h"
 #include "../Utilities/Point3D.h"
+#include "../Utilities/Point2D.h"
 #include "../Utilities/Normal.h"
 
 #include "../Utilities/Ray.h"
 #include "World.h"
 #include "Sphere.h"
 #include "Plane.h"
-#include "../Misc./Camera.h"
+#include "Triangle.h"
+#include "Directional.h"
 #include "../Misc./MultipleObjects.h"
+#include "../Misc./Pinhole.h"
 
 #include <iostream>
 using namespace std;
@@ -21,7 +24,6 @@ World::World(){
   background_color = black;
   tracer_ptr = new MultipleObjects();
   pixels.resize(vp.hres * vp.vres);
-
 }
 
 
@@ -29,28 +31,55 @@ void
 World::build(void){
   vp.set_hres(200);
   vp.set_vres(200);
-  vp.set_s(1.0);
+  vp.set_s(0.8);
   vp.set_gamma(1.0);
   pixels.resize(vp.hres * vp.vres); //resize pixels array again
-
   background_color = black;
   tracer_ptr = new MultipleObjects(this);
-
+  Pinhole* pinhole_ptr = new Pinhole;
+  pinhole_ptr->set_eye(300, 400, 500);
+  pinhole_ptr->set_eye(300, 400, 500);
+  pinhole_ptr->set_eye(300, 400, 500);
+  pinhole_ptr->set_eye(300, 400, 500);
+  set_camera(pinhole_ptr);
+//add sphere
   Sphere* sphere_ptr = new Sphere;
-  sphere_ptr->set_center(0, -25, 0);
-  sphere_ptr->set_radius(85.0);
+  sphere_ptr->set_center(15, 10, 0);
+  sphere_ptr->set_radius(10.0);
   sphere_ptr->set_color(1,0,0);
+  sphere_ptr->set_material(Matte);
   add_object(sphere_ptr);
 
-  Plane* plane_ptr = new Plane(Point3D(0,0,0), Normal(0,1,1));
+  Sphere* sphere_ptr2 = new Sphere;
+  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_radius(30.0);
+  sphere_ptr2->set_color(.5,0,0);
+  sphere_ptr2->set_material(Matte);
+  add_object(sphere_ptr2);
+
+//add plane
+  Plane* plane_ptr = new Plane(Point3D(0,-20,20), Normal(0,1,0));
   plane_ptr->set_color(0,0,1);
+  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
+
+  //add triangle
+    Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
+    triangle_ptr->set_color(1,1,1);
+    triangle_ptr->set_material(Matte);
+    add_object(triangle_ptr);
 }
 
 void
 World::add_object(GeometricObject* object_ptr){
   objects.push_back(object_ptr);
 }
+
+void
+World::set_camera(Camera* camera){
+  camera_ptr = camera;
+}
+
 
   ShadeRec
   World::hit_bare_bones_objects(const Ray& ray){
@@ -60,7 +89,7 @@ World::add_object(GeometricObject* object_ptr){
     double  num_objects = objects.size();
 
     for(int j = 0; j < num_objects; j++){
-      if(objects[j]->hit(ray, t, sr) && (t < tmin)){
+      if(objects[j]->hit(ray, t, sr) && (t < tmin) ){
         sr.hit_an_object = true;
         tmin = t;
         sr.color = objects[j]->get_color();
@@ -69,25 +98,52 @@ World::add_object(GeometricObject* object_ptr){
     return sr;
   }
 
+  ShadeRec
+  World::hit_objects(const Ray& ray){
+    ShadeRec sr(*this);
+    double t;
+    Normal normal;
+    Point3D local_hit_point;
+    float tmin = 10000; //kHugeValue
+    int num_objects = objects.size();
+
+    for(int j = 0; j < num_objects; j++){
+      if(objects[j]->hit(ray, t, sr) && (t < tmin)){
+        sr.hit_an_object = true;
+        tmin = t;
+        sr.material_ptr = objects[j]->get_material();
+        sr.hit_point = ray.o + t * ray.d;
+        normal = sr.normal;
+        local_hit_point = sr.local_hit_point;
+      }
+    }//end for
+
+    if(sr.hit_an_object){
+      sr.t = tmin;
+      sr.normal = normal;
+      sr.local_hit_point = local_hit_point;
+    }
+
+    return sr;
+  }
+
 void
-World::render_scene(void){
+World::render_scene_ortho(void){
   RGBColor pixel_color;
   Ray ray;
-  double zw = 100.0;
+  double zw = 0;
   double x,y;
-
-//  open_window(vp.hres, vp.vres);  //what is this function
-
 //populate the pixel array
   for(int r = 0; r < vp.vres; r++){ //vertical
     for(int c = 0; c <= vp.hres; c++){  //horizontal
+
       x = vp.s * (c - 0.5 * (vp.hres - 1.0));
       y = vp.s * (r - 0.5 * (vp.vres - 1.0));
 
 
       ray.o = Point3D(x, y, zw);
       pixel_color = tracer_ptr->trace_ray(ray);   //ray tracing!
-      cout << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
       display_pixel(r, c, pixel_color);           //put pixel in list!
     }
   }//end fors
@@ -98,24 +154,81 @@ World::render_scene(void){
 
 
 //save image
-  string fileName = "coolImage";
+  string fileName = "orthographic";
+  save_image(fileName);
+}//end render
+
+void
+World::render_scene_jittering(void){
+  RGBColor pixel_color;
+  Ray ray;
+  double zw = 0;
+  double x,y;
+  int samples = vp.num_samples;
+  int n = (int) sqrt((float) samples); //10 samples
+  Point2D pp;
+//populate the pixel array
+  for(int r = 0; r < vp.vres; r++){ //vertical
+    for(int c = 0; c <= vp.hres; c++){  //horizontal
+      pixel_color = black;
+
+      for(int p = 0; p < n; p++){
+        for (int q=0; q<n; q++){
+          pp.x = vp.s * (c - 0.5 * vp.hres + (q + rand_float()) /n);
+          pp.y = vp.s * (r - 0.5 * vp.vres + (p + rand_float()) /n);
+          ray.o = Point3D(pp.x, pp.y, zw);
+          pixel_color += tracer_ptr->trace_ray(ray);
+        }
+      }
+      pixel_color /= samples;
+      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+      display_pixel(r, c, pixel_color);           //put pixel in list!
+    }
+  }//end fors
+
+
+
+  cout << "all pixels printed" << endl;
+
+
+//save image
+  string fileName = "jittering";
   save_image(fileName);
 }
+
+void
+World::render_scene_perspective(void){
+
+  RGBColor pixel_color;
+  Ray ray;
+//  double zw = 0;
+//  double x,y;
+
+//populate the pixel array
+  for(int r = 0; r < vp.vres; r++){ //vertical
+    for(int c = 0; c <= vp.hres; c++){  //horizontal
+      ray.d = Vector3D(vp.s * (c - 0.5 * (vp.hres - 1.0)),
+        vp.s * (r - 0.5 * (vp.vres - 1.0)), 60);    //last is eye dist from screen
+      ray.d.normalize();
+      pixel_color = tracer_ptr->trace_ray(ray);
+      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+      display_pixel(r, c, pixel_color);           //put pixel in list!
+    }
+  }//end fors
+  cout << "all pixels printed" << endl;
+
+//save image
+  string fileName = "Perspective";
+  save_image(fileName);
+}//end render
+
 
 void
 World::display_pixel(const int row,
                     const int column,
                     const RGBColor& pixel_color){
-
-
-//    RGBColor tempColor;
     int idx = (column * vp.hres) + row;
-//    tempColor.r = std::fmin(pixel_color.r, 1);
-//    tempColor.g = std::fmin(pixel_color.g, 1);
-//    tempColor.b = std::fmin(pixel_color.b, 1);
-
-//    m_pixels[new_index] = tempColor;
-      pixels[idx] = pixel_color;
+    pixels[idx] = pixel_color;
 }
 
 void World::save_image(const std::string& outputFile) const {
