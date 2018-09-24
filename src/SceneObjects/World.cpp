@@ -42,10 +42,12 @@ World::build(void){
 
   //set up camera
   Pinhole* pinhole_ptr = new Pinhole;
-  pinhole_ptr->set_eye(300, 400, 500);
-  pinhole_ptr->set_eye(300, 400, 500);
-  pinhole_ptr->set_eye(300, 400, 500);
-  pinhole_ptr->set_eye(300, 400, 500);
+//  pinhole_ptr->set_eye(60, 30, 170);
+//  pinhole_ptr->set_lookat(-60,-180, 40);
+  pinhole_ptr->set_eye(0, 0, -30);
+  pinhole_ptr->set_lookat(0, 40, 30);
+  pinhole_ptr->set_view_distance(0);
+  pinhole_ptr->compute_uvw();
   set_camera(pinhole_ptr);
 //add sphere
   Sphere* sphere_ptr = new Sphere;
@@ -62,11 +64,13 @@ World::build(void){
 //  sphere_ptr2->set_material(Matte);
   add_object(sphere_ptr2);
 
+/*
 //add plane
-  Plane* plane_ptr = new Plane(Point3D(0,-20,20), Normal(15,5,-5));
+  Plane* plane_ptr = new Plane(Point3D(0,0,0), Normal(1,0,1));
   plane_ptr->set_color(0,0,1);
 //  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
+*/
 
   //add triangle
     Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
@@ -154,7 +158,6 @@ World::render_scene_ortho(void){
   }//end fors
 
 
-
   cout << "all pixels printed" << endl;
 
 
@@ -215,7 +218,7 @@ World::render_scene_perspective(void){
         vp.s * (r - 0.5 * (vp.vres - 1.0)), 200);    //last is eye dist from screen
       ray.d.normalize();
       pixel_color = tracer_ptr->trace_ray(ray);
-      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+  //    cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
       display_pixel(r, c, pixel_color);           //put pixel in list!
     }
   }//end fors

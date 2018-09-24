@@ -19,6 +19,19 @@ Camera::compute_uvw(void){
   u = up ^ w;
   u.normalize();
   v = w ^ u;
+
+	if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) { // camera looking vertically down
+		u = Vector3D(0, 0, 1);
+		v = Vector3D(1, 0, 0);
+		w = Vector3D(0, 1, 0);
+	}
+
+	if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) { // camera looking vertically up
+		u = Vector3D(1, 0, 0);
+		v = Vector3D(0, 0, 1);
+		w = Vector3D(0, -1, 0);
+	}
+
 }
 
 //setters
