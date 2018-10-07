@@ -29,6 +29,9 @@ class Camera{
     void
     set_lookat(const Point3D& p);
     void
+    set_exposure_time(float length);
+
+    void
     set_lookat(const float x, const float y, const float z);
 
     void

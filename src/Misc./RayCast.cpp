@@ -3,7 +3,7 @@
 #include "../Utilities/ShadeRec.h"
 #include "../Utilities/Material.h"
 
-/*
+
 RayCast::RayCast(void)
 	: Tracer()
 {}
@@ -23,5 +23,3 @@ RayCast::trace_ray(const Ray ray, const int depth) const {
 	else
 		return (world_ptr->background_color);
 }
-
-*/

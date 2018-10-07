@@ -54,6 +54,7 @@ const double Sphere::kEpsilon = .001;
   	double 		disc	= b * b - 4.0 * a * c;
 
   	if (disc < 0.0){
+  //              cout << "MISS!!" << endl;
       return(false);
     }
   	else {
@@ -65,6 +66,7 @@ const double Sphere::kEpsilon = .001;
   			tmin = t;
   			sr.normal 	 = (temp + t * ray.d) / radius;
   			sr.local_hit_point = ray.o + t * ray.d;
+    //              cout << "HIT!!" << endl;
   			return (true);
   		}
 
@@ -74,9 +76,10 @@ const double Sphere::kEpsilon = .001;
   			tmin = t;
   			sr.normal   = (temp + t * ray.d) / radius;
   			sr.local_hit_point = ray.o + t * ray.d;
+      //            cout << "HIT!!" << endl;
   			return (true);
   		}
   	}
-
+        //  cout << "MISS!!" << endl;
   	return (false);
   }

@@ -44,9 +44,11 @@ World::build(void){
   Pinhole* pinhole_ptr = new Pinhole;
 //  pinhole_ptr->set_eye(60, 30, 170);
 //  pinhole_ptr->set_lookat(-60,-180, 40);
-  pinhole_ptr->set_eye(0, 0, -30);
-  pinhole_ptr->set_lookat(0, 40, 30);
-  pinhole_ptr->set_view_distance(0);
+  pinhole_ptr->set_eye(15, -15, 70);
+  pinhole_ptr->set_lookat(15, 10, 10);
+  pinhole_ptr->set_view_distance(40);
+  pinhole_ptr->set_exposure_time(1);
+//  pingole_ptr->set_vpd()
   pinhole_ptr->compute_uvw();
   set_camera(pinhole_ptr);
 //add sphere
@@ -190,7 +192,7 @@ World::render_scene_multijittered(void){
           pixel_color += tracer_ptr->trace_ray(ray);
         }
       pixel_color /= vp.num_samples;
-      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
+//      cout << "Color: " << pixel_color.r << pixel_color.g << pixel_color.b << endl;
       display_pixel(r, c, pixel_color);           //put pixel in list!
     }
   }//end fors

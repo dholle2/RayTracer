@@ -4,7 +4,7 @@
 //using namespace std;
 int
 main(void){
-  
+/*
   World w;
   std::cout << "world viewplane hres, vres = " << w.vp.hres << ", " << w.vp.vres << std::endl;
   w.build();
@@ -24,7 +24,7 @@ cout << "did perspective, sir!" << endl;
   w3.build();
   w3.render_scene_multijittered();
   cout << "did multijittered sampling, sir!" << endl;
-
+*/
 
   World w4;
   w4.build();

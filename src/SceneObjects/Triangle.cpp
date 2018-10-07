@@ -59,7 +59,7 @@ Triangle::Triangle (void)
 
   	double e3 = a * p - b * r + d * s;
   	double t = e3 * inv_denom;
-    
+
   	if (t < kEpsilon)
   		return (false);
     else{

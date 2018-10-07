@@ -6,7 +6,8 @@ Camera::Camera(void)
 		up(0, 1, 0),
 		u(1, 0, 0),
 		v(0, 1, 0),
-		w(0, 0, 1)
+		w(0, 0, 1),
+		exposure_time(1)
 {}
 
 Camera::~Camera(void)
@@ -45,6 +46,11 @@ Camera::compute_uvw(void){
     eye.x = x;
     eye.y = y;
     eye.z = z;
+  }
+
+	void
+  Camera::set_exposure_time(float length){
+    exposure_time = length;
   }
 
   void
