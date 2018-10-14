@@ -39,6 +39,9 @@ class Sampler {
 		void
 		map_samples_to_sphere(void);
 
+		virtual Sampler*
+		clone(void) const = 0;
+
 		Point2D
 		sample_unit_disk(void);
 		Point3D
@@ -53,7 +56,7 @@ class Sampler {
     unsigned long 	count;
 		int 		jump;
 
-		vector<Point2D>			disk_samples;	
+		vector<Point2D>			disk_samples;
 		vector<Point3D> 		hemisphere_samples;
 		vector<Point3D> 		sphere_samples;
 };

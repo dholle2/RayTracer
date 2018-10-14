@@ -10,6 +10,7 @@
 #include "Light.h"
 #include "../Misc./Camera.h"
 //#include "../Misc./BuildRedSphere.h"
+#include "Ambient.h"
 
 using namespace std;
 class World{
@@ -23,6 +24,7 @@ class World{
     Tracer* tracer_ptr;
     vector<GeometricObject*> objects;
     vector<RGBColor> pixels;
+    Light* ambient_ptr;     //light stuff
     vector<Light*> lights;
     Camera* camera_ptr;
 
@@ -34,6 +36,9 @@ class World{
 
     void
     add_light(Light* light_ptr);
+
+    void
+    set_ambient_light(Ambient* ambient);
 
     ShadeRec
     hit_bare_bones_objects(const Ray& ray);

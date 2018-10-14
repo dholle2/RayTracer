@@ -17,6 +17,11 @@ Multijittered::Multijittered(int num_samples, int m)
 Multijittered::~Multijittered(void)
 {}
 
+Multijittered*
+Multijittered::clone(void) const {
+	return (new Multijittered(*this));
+}
+
 
 void
 Multijittered::generate_samples(void) {

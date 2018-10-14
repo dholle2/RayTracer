@@ -61,18 +61,18 @@ Pinhole::render_scene(World& w) {
 					pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
 					pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 					ray.d = ray_direction(pp);
-					L += w.tracer_ptr->trace_ray(ray);
+					L += w.tracer_ptr->trace_ray(ray, depth);
 				}
 //				ray.d.z = ray.d.z;
-				cout << "RAY DIRECTION: x " << ray.d.x << " y " << ray.d.y << " z " << ray.d.z << endl;
-				cout << "RAY ORIGIN: x" << ray.o.x << " y " << ray.o.y << " z " << ray.o.z << endl;
+//				cout << "RAY DIRECTION: x " << ray.d.x << " y " << ray.d.y << " z " << ray.d.z << endl;
+//				cout << "RAY ORIGIN: x" << ray.o.x << " y " << ray.o.y << " z " << ray.o.z << endl;
 			L /= vp.num_samples;
 			L *= exposure_time;
 	//		cout << "Color: " << L.r << L.g << L.b << endl;
-	cout << exposure_time << endl;
+//	cout << exposure_time << endl;
 			w.display_pixel(r, c, L);
 		}
-		cout << "up.x: " << up.x << " up.y: " << up.y << " up.z " << up.z << endl;
+//		cout << "up.x: " << up.x << " up.y: " << up.y << " up.z " << up.z << endl;
 		cout << "all pixels printed" << endl;
 		string fileName = "pinhole";
 		w.save_image(fileName);
@@ -104,7 +104,7 @@ Pinhole::render_scene(World& w) {
 							L += w.tracer_ptr->trace_ray(ray);
 						}
 
-	/*		for (int j = 0; j < vp.num_samples; j++){
+			for (int j = 0; j < vp.num_samples; j++){
 					sp = vp.sampler_ptr->sample_unit_square();
 					pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
 					pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);

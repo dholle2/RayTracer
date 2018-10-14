@@ -15,10 +15,10 @@ Tracer::~Tracer(void){
 
 RGBColor
 Tracer::trace_ray(const Ray& ray) const{
-	return red;
+	return white;
 }
-
+//	RayCast
 RGBColor
 Tracer::trace_ray(const Ray ray, const int depth){
-	return red;
+	return white;
 }

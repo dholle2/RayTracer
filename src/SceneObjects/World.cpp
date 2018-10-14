@@ -14,8 +14,12 @@
 #include "Triangle.h"
 #include "Directional.h"
 #include "../Misc./MultipleObjects.h"
+#include "../Misc./RayCast.h"
 #include "../Misc./Pinhole.h"
 #include "../Misc./Multijittered.h"
+#include "GeometricObject.h"
+#include "../Utilities/Reflective.h"
+#include "../Utilities/Material.h"
 
 #include <iostream>
 using namespace std;
@@ -23,15 +27,22 @@ using namespace std;
 World::World(){
   vp = ViewPlane();
   background_color = black;
-  tracer_ptr = new MultipleObjects();
+//  tracer_ptr = new MultipleObjects();
   pixels.resize(vp.hres * vp.vres);
+  ambient_ptr = new Ambient();
 }
 
 
 void
 World::build(void){
   background_color = black;
-  tracer_ptr = new MultipleObjects(this);
+//  tracer_ptr = new MultipleObjects(this);
+  tracer_ptr = new RayCast(this);
+  Ambient* ambient_ptr = new Ambient;
+  ambient_ptr->scale_radiance(1.0);
+  set_ambient_light(ambient_ptr);
+
+
   int num_samples = 10;     //samples to use for the sampling
   vp.set_hres(200);
   vp.set_vres(200);
@@ -55,17 +66,23 @@ World::build(void){
   Sphere* sphere_ptr = new Sphere;
   sphere_ptr->set_center(15, 10, 20);
   sphere_ptr->set_radius(10.0);
-  sphere_ptr->set_color(1,0,0);
-//  sphere_ptr->set_material(Matte);
-  add_object(sphere_ptr);
+//  sphere_ptr->set_color(1,0,0);
 
+  Reflective* reflective_ptr1 = new Reflective;
+  reflective_ptr1->set_kr(0.5);
+  reflective_ptr1->set_cr(1,1,0);
+  sphere_ptr->set_material(reflective_ptr1);
+//  sphere_ptr->material_ptr->set_cr(RGBColor(1,0,0));
+// /  sphere_ptr->material_ptr->set_kr(1.0);      //change this experimentally
+  add_object(sphere_ptr);
+/*
   Sphere* sphere_ptr2 = new Sphere;
   sphere_ptr2->set_center(16, 40, 30);
   sphere_ptr2->set_radius(30.0);
-  sphere_ptr2->set_color(.5,0,0);
+  sphere_ptr2->set_color(0,.5,0);
 //  sphere_ptr2->set_material(Matte);
   add_object(sphere_ptr2);
-
+*/
 /*
 //add plane
   Plane* plane_ptr = new Plane(Point3D(0,0,0), Normal(1,0,1));
@@ -73,12 +90,13 @@ World::build(void){
 //  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
 */
-
+/*
   //add triangle
     Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
     triangle_ptr->set_color(1,1,1);
 //    triangle_ptr->set_material(Matte);
     add_object(triangle_ptr);
+*/
 }
 
 void
@@ -89,6 +107,11 @@ World::add_object(GeometricObject* object_ptr){
 void
 World::set_camera(Camera* camera){
   camera_ptr = camera;
+}
+
+void
+World::set_ambient_light(Ambient* ambient){
+  ambient_ptr = ambient;
 }
 
 
@@ -122,7 +145,7 @@ World::set_camera(Camera* camera){
       if(objects[j]->hit(ray, t, sr) && (t < tmin)){
         sr.hit_an_object = true;
         tmin = t;
-  //      sr.material_ptr = objects[j]->get_material();
+        sr.material_ptr = objects[j]->get_material(); //get material
         sr.hit_point = ray.o + t * ray.d;
         normal = sr.normal;
         local_hit_point = sr.local_hit_point;

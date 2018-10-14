@@ -10,6 +10,9 @@ class Multijittered: public Sampler{
     Multijittered(int num_samples);
 		Multijittered(int num_samples, int m);
 
+    virtual Multijittered*
+		clone(void) const;
+
     virtual
 		~Multijittered(void);
     virtual void

@@ -11,18 +11,22 @@
 #include "../Utilities/Normal.h"
 #include "../Utilities/Ray.h"
 #include "../Utilities/ShadeRec.h"
+//#include "../Utilities/Material.h"
 
 class Material;
 
 class GeometricObject{
   public:
-        //constructors
-/*
+
+
     Material*
-		get_material(void);
+		get_material(void) const;
+
     void
-    set_material(Material m);
-  */
+    set_material(Material* m);
+
+
+//constructors
     GeometricObject(void);
     GeometricObject(const GeometricObject& object);
     virtual ~GeometricObject(void);
@@ -38,7 +42,7 @@ class GeometricObject{
     void
     set_color(float x, float y, float z);
 
-//    mutable Material*   material_ptr;
+    mutable Material*   material_ptr;
     RGBColor color;
 };
 

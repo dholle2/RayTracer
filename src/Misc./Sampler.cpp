@@ -49,6 +49,14 @@ Sampler::sample_unit_square(void){
   return (samples[jump + shuffled_indices[jump+ count++ % num_samples]]);
 }
 
+Point3D
+Sampler::sample_hemisphere(void) {
+	if (count % num_samples == 0)  									// start of a new pixel
+		jump = (rand_int() % num_sets) * num_samples;
+
+	return (hemisphere_samples[jump + shuffled_indices[jump + count++ % num_samples]]);
+}
+
 void
 Sampler::setup_shuffled_indices(void) {
 	shuffled_indices.reserve(num_samples * num_sets);

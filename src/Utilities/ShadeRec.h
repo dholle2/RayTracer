@@ -23,7 +23,7 @@ class World;
 
 class ShadeRec {
 	public:
-	
+
 		bool				hit_an_object;		// did the ray hit an object?
 		Material* 			material_ptr;		// pointer to the nearest object's material
 		Point3D 			hit_point;			// world coordinates of intersection
@@ -36,7 +36,7 @@ class ShadeRec {
 		float				u;					// texture coordinate
 		float				v;					// texture coordinate
 		World&				w;					// world reference
-				
+
 		ShadeRec(World& wr);					// constructor
 		ShadeRec(const ShadeRec& sr);			// copy constructor
 		~ShadeRec(void);						// destructor

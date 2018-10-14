@@ -2,7 +2,9 @@
 #include "../SceneObjects/World.h"
 #include "../Utilities/ShadeRec.h"
 #include "../Utilities/Material.h"
+#include <iostream>
 
+using namespace std;
 
 RayCast::RayCast(void)
 	: Tracer()
@@ -13,11 +15,17 @@ RayCast::RayCast(World* _worldPtr)
 RayCast::~RayCast(void) {}
 
 RGBColor
-RayCast::trace_ray(const Ray ray, const int depth) const {
+RayCast::trace_ray(const Ray ray, const int depth)  {
+
+	cout << "starting trace ray!" << endl;
 	ShadeRec sr(world_ptr->hit_objects(ray));
 
+	cout << "shade rec set, sir!" << endl;
+
 	if (sr.hit_an_object) {
+		cout << "HIT" << endl;
 		sr.ray = ray;
+//		cout << sr.material_ptr-> << endl;
 		return (sr.material_ptr->shade(sr));
 	}
 	else

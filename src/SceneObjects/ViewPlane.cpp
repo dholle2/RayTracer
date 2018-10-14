@@ -35,15 +35,15 @@ ViewPlane::set_gamma(float g){
 
 void
 ViewPlane::set_sampler(Sampler* sp){
-  cout << "Setting Sampler!" << endl;
+//  cout << "Setting Sampler!" << endl;
   if(sampler_ptr != NULL){
-    cout << "about to delete sampler_ptr!" << endl;
+//    cout << "about to delete sampler_ptr!" << endl;
     //delete sampler_ptr;
-    cout << "sampler_ptr deleted!" << endl;
+//    cout << "sampler_ptr deleted!" << endl;
     sampler_ptr = NULL;
   }
   num_samples = sp->get_num_samples();
-  cout << "num_samples: " << num_samples << endl;
+//  cout << "num_samples: " << num_samples << endl;
   sampler_ptr = sp;
 }
 
