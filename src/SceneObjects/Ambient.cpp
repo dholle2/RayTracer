@@ -11,7 +11,7 @@
 Ambient::Ambient (void)
 	: 	Light(),
 		ls(1.0),
-		color(1.0)			
+		color(1.0)
 {}
 
 
@@ -20,42 +20,53 @@ Ambient::Ambient (void)
 Ambient::Ambient (const Ambient& a)
 	: 	Light(a),
 		ls(a.ls),
-		color(a.color) 		
+		color(a.color)
 {}
 
 
 // ---------------------------------------------------------------------- clone
 
-Light* 
+Light*
 Ambient::clone(void) const {
 	return (new Ambient(*this));
-}	
+}
 
 
 // ---------------------------------------------------------------------- assignment operator
 
-Ambient& 
+Ambient&
 Ambient::operator= (const Ambient& rhs) {
 	if (this == &rhs)
 		return (*this);
-			
+
 	Light::operator= (rhs);
-	
+
 	ls 		= rhs.ls;
 	color 	= rhs.color;
-	
+
 	return (*this);
 }
 
+bool
+Ambient::casts_shadows(void){
+	return false;
+}
 
-// ---------------------------------------------------------------------- destructor																			
+bool
+Ambient::in_shadow(const Ray& ray, const ShadeRec& sr){
+	return false;			//ambient has no shadow
+										//may want to change for ambient occlusion?
+};
+
+
+// ---------------------------------------------------------------------- destructor
 
 Ambient::~Ambient (void) {}
 
 
-// ---------------------------------------------------------------------- get_direction	
+// ---------------------------------------------------------------------- get_direction
 
-Vector3D								
+Vector3D
 Ambient::get_direction(ShadeRec& s) {
 	return (Vector3D(0.0));
 }
@@ -64,7 +75,7 @@ Ambient::get_direction(ShadeRec& s) {
 // ---------------------------------------------------------------------- L
 
 RGBColor
-Ambient::L(ShadeRec& sr) {	
+Ambient::L(ShadeRec& sr) {
 	return (ls * color);
 }
 

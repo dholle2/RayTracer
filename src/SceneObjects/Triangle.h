@@ -13,8 +13,14 @@ class Triangle: public GeometricObject {
     void
     compute_normal(void);
 
+		virtual Triangle*
+	  clone(void) const;
+
     virtual bool
 		hit(const Ray& ray, double& tmin, ShadeRec& sr) const;
+
+		virtual bool
+    shadow_hit(const Ray& ray, float& tmin);
 
     Point3D p1, p2, p3;
     Normal normal;

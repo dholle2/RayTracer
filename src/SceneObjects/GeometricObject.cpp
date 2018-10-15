@@ -8,6 +8,12 @@
   GeometricObject::GeometricObject(const GeometricObject& object)
   : color(object.color)
   {}
+/*
+    GeometricObject*
+    GeometricObject::clone(void) const{
+      	return (new GeometricObject(*this));
+    }
+*/
 
 
   Material*
@@ -20,8 +26,12 @@
   GeometricObject::set_material(Material* m) {
   	material_ptr = m;
   }
-
-
+/*
+  GeometricObject*
+  GeometricObject::clone(void) const {
+  	return (new GeometricObject(*this));
+  }
+*/
   GeometricObject::~GeometricObject(void)
   {}
 

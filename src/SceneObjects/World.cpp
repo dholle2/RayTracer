@@ -13,6 +13,7 @@
 #include "Plane.h"
 #include "Triangle.h"
 #include "Directional.h"
+#include "PointLight.h"
 #include "../Misc./MultipleObjects.h"
 #include "../Misc./RayCast.h"
 #include "../Misc./Pinhole.h"
@@ -32,22 +33,21 @@ World::World(){
 //  tracer_ptr = new MultipleObjects();
   pixels.resize(vp.hres * vp.vres);
   //ambient_ptr = new Ambient();
-}
 
-
-void
-World::buildReflective(void){
-  background_color = black;
-//  tracer_ptr = new MultipleObjects(this);
-
-                                            //lights
+    //lights
   tracer_ptr = new RayCast(this);
   Ambient* ambient_ptr = new Ambient;
-  ambient_ptr->scale_radiance(1.0);
+  ambient_ptr->scale_radiance(0.6);
   set_ambient_light(ambient_ptr);
-  Directional* directional_ptr = new Directional;
-  directional_ptr->set_direction(-1, 0.5, -0.3);
-  add_light(directional_ptr);
+//  Directional* directional_ptr = new Directional;
+//  directional_ptr->set_direction(0, 0, -1);
+//  directional_ptr->set_ls(1.1);
+//  add_light(directional_ptr);
+  PointLight* pointlight_ptr = new PointLight(5,5,5);
+//  pointlight_ptr->set_direction(0, 0, -1);
+//  pointlight_ptr->set_ls(1.1);
+  add_light(pointlight_ptr);
+
 
   int num_samples = 10;     //samples to use for the sampling
   vp.set_hres(200);
@@ -59,20 +59,22 @@ World::buildReflective(void){
 
   //set up camera
   Pinhole* pinhole_ptr = new Pinhole;
-//  pinhole_ptr->set_eye(60, 30, 170);
-//  pinhole_ptr->set_lookat(-60,-180, 40);
-  pinhole_ptr->set_eye(0, 0, 0);
-  pinhole_ptr->set_lookat(15, 10, 10);
-  pinhole_ptr->set_view_distance(40);
+  //  pinhole_ptr->set_eye(60, 30, 170);
+  //  pinhole_ptr->set_lookat(-60,-180, 40);
+  pinhole_ptr->set_eye(-20, 0, 0);
+  pinhole_ptr->set_lookat(0, 30, 0);
+  pinhole_ptr->set_view_distance(30);
   pinhole_ptr->set_exposure_time(1);
-//  pingole_ptr->set_vpd()
+  //  pingole_ptr->set_vpd()
   pinhole_ptr->compute_uvw();
   set_camera(pinhole_ptr);
-//add sphere
-  Sphere* sphere_ptr = new Sphere;
-  sphere_ptr->set_center(15, 10, 20);
-  sphere_ptr->set_radius(10.0);
-//  sphere_ptr->set_color(1,0,0);
+}
+
+
+void
+World::buildReflective(void){
+  background_color = black;
+//  tracer_ptr = new MultipleObjects(this);
 
                                             //reflective
   Phong* phong_ptr1 = new Phong;
@@ -80,91 +82,104 @@ World::buildReflective(void){
   phong_ptr1->set_cs(0,0,1);
   phong_ptr1->set_exp(2);
   phong_ptr1->set_ka(0.5);
-  phong_ptr1->set_cd(0,1,0);  //red
+  phong_ptr1->set_cd(0,1,0);  //green
   phong_ptr1->set_kd(0.8);
 
+  Phong* phong_ptr2 = new Phong;
+  phong_ptr2->set_ks(1.2);
+  phong_ptr2->set_cs(0,0,1);
+  phong_ptr2->set_exp(2);
+  phong_ptr2->set_ka(0.5);
+  phong_ptr2->set_cd(1,0,0);  //red
+  phong_ptr2->set_kd(0.8);
 
-  sphere_ptr->set_material(phong_ptr1);
-//  sphere_ptr->material_ptr->set_cr(RGBColor(1,0,0));
-// /  sphere_ptr->material_ptr->set_kr(1.0);      //change this experimentally
+  Phong* phong_ptr3 = new Phong;
+  phong_ptr3->set_ks(1.2);
+  phong_ptr3->set_cs(0,0,1);
+  phong_ptr3->set_exp(2);
+  phong_ptr3->set_ka(0.5);
+  phong_ptr3->set_cd(1,1,0);  //yellow
+  phong_ptr3->set_kd(0.8);
+
+  //add sphere
+  Sphere* sphere_ptr = new Sphere;
+  sphere_ptr->set_center(15, 10, 10);
+  sphere_ptr->set_radius(10.0);
+  sphere_ptr->set_material(phong_ptr3);
   add_object(sphere_ptr);
 
   Sphere* sphere_ptr2 = new Sphere;
   sphere_ptr2->set_center(16, 40, 30);
   sphere_ptr2->set_radius(30.0);
-//  sphere_ptr2->set_color(0,.5,0);
   sphere_ptr2->set_material(phong_ptr1);
   add_object(sphere_ptr2);
 
+  Sphere* sphere_ptr3 = new Sphere;
+  sphere_ptr3->set_center(20, 20, 30);
+  sphere_ptr3->set_radius(20.0);
+  sphere_ptr3->set_material(phong_ptr2);
+  add_object(sphere_ptr3);
+
 /*
 //add plane
-  Plane* plane_ptr = new Plane(Point3D(0,0,0), Normal(1,0,1));
+  Plane* plane_ptr = new Plane(Point3D(30,30,30), Normal(0,5,5));
   plane_ptr->set_color(0,0,1);
-//  plane_ptr->set_material(Matte);
+  plane_ptr->set_material(phong_ptr3);
   add_object(plane_ptr);
 */
 
   //add triangle
-    Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
-//    triangle_ptr->set_color(1,1,1);
-    triangle_ptr->set_material(phong_ptr1);
+  /*
+    Triangle* triangle_ptr = new Triangle(Point3D(15,10,20), Point3D(10,10,0), Point3D(0,20,30));
+    triangle_ptr->set_material(phong_ptr2);
     add_object(triangle_ptr);
-
+*/
 } //end reflective
 
 void
 World::buildDiffuse(void){
   background_color = black;
 
-                                            //lights
-  tracer_ptr = new RayCast(this);
-  Ambient* ambient_ptr = new Ambient;
-  ambient_ptr->scale_radiance(1.0);
-  set_ambient_light(ambient_ptr);
-  Directional* directional_ptr = new Directional;
-  directional_ptr->set_direction(-1, 0.5, -0.3);
-  add_light(directional_ptr);
 
-  int num_samples = 10;     //samples to use for the sampling
-  vp.set_hres(200);
-  vp.set_vres(200);
-  vp.set_s(0.8);
-  vp.set_gamma(1.0);
-  pixels.resize(vp.hres * vp.vres); //resize pixels array again
-  vp.set_sampler(new Multijittered(num_samples));
-
-  //set up camera
-  Pinhole* pinhole_ptr = new Pinhole;
-  pinhole_ptr->set_eye(0, 0, 0);
-  pinhole_ptr->set_lookat(15, 10, 10);
-  pinhole_ptr->set_view_distance(40);
-  pinhole_ptr->set_exposure_time(1);
-  pinhole_ptr->compute_uvw();
-  set_camera(pinhole_ptr);
 //add sphere
-  Sphere* sphere_ptr = new Sphere;
-  sphere_ptr->set_center(15, 10, 20);
-  sphere_ptr->set_radius(10.0);
+Matte* matte_ptr1 = new Matte;
+matte_ptr1->set_ka(0.5);
+matte_ptr1->set_cd(0,1,0);  //green
+matte_ptr1->set_kd(0.8);
 
-                                                  //diffuse
-  Matte* matte_ptr1 = new Matte;
-  matte_ptr1->set_ka(0.5);
-  matte_ptr1->set_cd(0,1,0);  //red
-  matte_ptr1->set_kd(0.8);
+Matte* matte_ptr2 = new Matte;
+matte_ptr2->set_ka(0.5);
+matte_ptr2->set_cd(1,0,0);  //red
+matte_ptr2->set_kd(0.8);
 
-  sphere_ptr->set_material(matte_ptr1);
-  add_object(sphere_ptr);
+Matte* matte_ptr3 = new Matte;
+matte_ptr3->set_ka(0.5);
+matte_ptr3->set_cd(1,1,0);  //yellow
+matte_ptr3->set_kd(0.8);
 
-  Sphere* sphere_ptr2 = new Sphere;
-  sphere_ptr2->set_center(16, 40, 30);
-  sphere_ptr2->set_radius(30.0);
-//  sphere_ptr2->set_color(0,.5,0);
-  sphere_ptr2->set_material(matte_ptr1);
-  add_object(sphere_ptr2);
+//add sphere
+Sphere* sphere_ptr = new Sphere;
+sphere_ptr->set_center(15, 10, 10);
+sphere_ptr->set_radius(10.0);
+sphere_ptr->set_material(matte_ptr3);
+add_object(sphere_ptr);
 
+Sphere* sphere_ptr2 = new Sphere;
+sphere_ptr2->set_center(16, 40, 30);
+sphere_ptr2->set_radius(30.0);
+sphere_ptr2->set_material(matte_ptr1);
+add_object(sphere_ptr2);
+
+Sphere* sphere_ptr3 = new Sphere;
+sphere_ptr3->set_center(20, 20, 30);
+sphere_ptr3->set_radius(20.0);
+sphere_ptr3->set_material(matte_ptr2);
+add_object(sphere_ptr3);
+/*
     Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
     triangle_ptr->set_material(matte_ptr1);
     add_object(triangle_ptr);
+*/
 
 }
 

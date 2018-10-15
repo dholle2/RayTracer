@@ -18,6 +18,11 @@ using namespace std;
   //  normal.normalize();
   }
 
+  Plane*
+  Plane::clone(void) const {
+    return (new Plane(*this));
+  }
+
   bool
   Plane::hit(const Ray& ray, double& tmin, ShadeRec& sr) const{
     double t = (point - ray.o) * normal / (ray.d * normal);
@@ -37,3 +42,16 @@ using namespace std;
       return false;
     }
   }//end hit
+
+
+  bool
+  Plane::shadow_hit(const Ray& ray, float& tmin){
+    double t = (point - ray.o) * normal / (ray.d * normal);
+
+    if(t > kEpsilon){
+      tmin = t;
+      return true;
+    }else{
+      return false;
+    }
+  }

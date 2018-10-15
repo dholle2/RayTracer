@@ -26,6 +26,12 @@ class Sphere: public GeometricObject {
     virtual bool
     hit(const Ray& ray, double& t, ShadeRec& s) const;
 
+		virtual Sphere*
+	  clone(void) const;
+
+		virtual bool
+		shadow_hit(const Ray& ray, float& tmin);
+
   private:
 
     Point3D center;

@@ -26,7 +26,7 @@ Phong::clone(void) const {
   RGBColor
   Phong::shade(ShadeRec& sr){
     Vector3D wo = -sr.ray.d;
-    RGBColor L = ambient_brdf->rho(sr, wo); //* sr.w.ambient_ptr->L(sr); //no ambient pointer, find out how to use directional instead
+    RGBColor L = ambient_brdf->rho(sr, wo) * sr.w.ambient_ptr->L(sr); //no ambient pointer, find out how to use directional instead
 //  RGBColor L = black;
 //  cout << "Phong Color from Ambient: " << L.r << L.g << L.b << endl;
     int num_lights = sr.w.lights.size();
@@ -38,9 +38,19 @@ Phong::clone(void) const {
 
 
       if(ndotwi > 0.0){
-        L += (diffuse_brdf->f(sr, wo, wi) + specular_brdf->f(sr, wo, wi)) * sr.w.lights[j]->L(sr) * ndotwi;
+        bool in_shadow = false;
+            //shadow test
+        if(sr.w.lights[j]->casts_shadows()){
+          Ray shadowRay(sr.hit_point, wi);
+          in_shadow = sr.w.lights[j]->in_shadow(shadowRay, sr);
+        }
+        if(!in_shadow){
+          L += (diffuse_brdf->f(sr, wo, wi) + specular_brdf->f(sr, wo, wi)) * sr.w.lights[j]->L(sr) * ndotwi;
+        }else{
+  //        cout << "in shadow" << endl;
+        }
   //      cout << "Phong Color from specular: " << specular_brdf->f(sr, wo, wi).r << specular_brdf->f(sr, wo, wi).g << specular_brdf->f(sr, wo, wi).b << endl;
       }
-    }
+    }//end for
     return (L);
   }

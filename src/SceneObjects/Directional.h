@@ -21,11 +21,20 @@ class Directional: public Light {
   void
   set_direction(float x, float y, float z);
 
+  void
+  set_ls(float l);
+
   virtual Vector3D
   get_direction(ShadeRec& sr);
 
   virtual RGBColor
   L(ShadeRec& sr);
+
+  bool
+  in_shadow(const Ray& ray, const ShadeRec& sr);
+
+  virtual bool
+  casts_shadows(void);
 
   float		ls;
   RGBColor	color;
