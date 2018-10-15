@@ -1,6 +1,6 @@
 #include "src/SceneObjects/World.h"
 #include <iostream>
-
+#include <string>
 //using namespace std;
 int
 main(void){
@@ -27,8 +27,13 @@ cout << "did perspective, sir!" << endl;
 */
 
   World w4;
-  w4.build();
-  w4.camera_ptr->render_scene(w4);
+  w4.buildReflective();
+  w4.camera_ptr->render_scene(w4, "Reflective");
+  cout << "did camera, sir!" << endl;
+
+  World w5;
+  w5.buildDiffuse();
+  w5.camera_ptr->render_scene(w5, "Diffuse");
   cout << "did camera, sir!" << endl;
 
   return 0;

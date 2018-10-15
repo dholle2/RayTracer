@@ -23,7 +23,7 @@ class Reflective: public Phong {
 		virtual Reflective*
 		clone(void) const;
 
-		~Reflective(void);
+//		~Reflective(void);
 
 		void
 		set_kr(const float k);
@@ -59,7 +59,6 @@ Reflective::set_kr(const float k) {
 inline void
 Reflective::set_cr(const RGBColor& c) {
 	reflective_brdf->set_cr(c);
-
 }
 
 

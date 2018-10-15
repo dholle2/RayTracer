@@ -19,7 +19,9 @@
 #include "../Misc./Multijittered.h"
 #include "GeometricObject.h"
 #include "../Utilities/Reflective.h"
+#include "../Utilities/Phong.h"
 #include "../Utilities/Material.h"
+#include "../Utilities/Matte.h"
 
 #include <iostream>
 using namespace std;
@@ -29,24 +31,28 @@ World::World(){
   background_color = black;
 //  tracer_ptr = new MultipleObjects();
   pixels.resize(vp.hres * vp.vres);
-  ambient_ptr = new Ambient();
+  //ambient_ptr = new Ambient();
 }
 
 
 void
-World::build(void){
+World::buildReflective(void){
   background_color = black;
 //  tracer_ptr = new MultipleObjects(this);
+
+                                            //lights
   tracer_ptr = new RayCast(this);
   Ambient* ambient_ptr = new Ambient;
   ambient_ptr->scale_radiance(1.0);
   set_ambient_light(ambient_ptr);
-
+  Directional* directional_ptr = new Directional;
+  directional_ptr->set_direction(-1, 0.5, -0.3);
+  add_light(directional_ptr);
 
   int num_samples = 10;     //samples to use for the sampling
   vp.set_hres(200);
   vp.set_vres(200);
-  vp.set_s(0.8);
+  vp.set_s(.8);
   vp.set_gamma(1.0);
   pixels.resize(vp.hres * vp.vres); //resize pixels array again
   vp.set_sampler(new Multijittered(num_samples));
@@ -55,7 +61,7 @@ World::build(void){
   Pinhole* pinhole_ptr = new Pinhole;
 //  pinhole_ptr->set_eye(60, 30, 170);
 //  pinhole_ptr->set_lookat(-60,-180, 40);
-  pinhole_ptr->set_eye(15, -15, 70);
+  pinhole_ptr->set_eye(0, 0, 0);
   pinhole_ptr->set_lookat(15, 10, 10);
   pinhole_ptr->set_view_distance(40);
   pinhole_ptr->set_exposure_time(1);
@@ -68,21 +74,28 @@ World::build(void){
   sphere_ptr->set_radius(10.0);
 //  sphere_ptr->set_color(1,0,0);
 
-  Reflective* reflective_ptr1 = new Reflective;
-  reflective_ptr1->set_kr(0.5);
-  reflective_ptr1->set_cr(1,1,0);
-  sphere_ptr->set_material(reflective_ptr1);
+                                            //reflective
+  Phong* phong_ptr1 = new Phong;
+  phong_ptr1->set_ks(1.2);
+  phong_ptr1->set_cs(0,0,1);
+  phong_ptr1->set_exp(2);
+  phong_ptr1->set_ka(0.5);
+  phong_ptr1->set_cd(0,1,0);  //red
+  phong_ptr1->set_kd(0.8);
+
+
+  sphere_ptr->set_material(phong_ptr1);
 //  sphere_ptr->material_ptr->set_cr(RGBColor(1,0,0));
 // /  sphere_ptr->material_ptr->set_kr(1.0);      //change this experimentally
   add_object(sphere_ptr);
-/*
+
   Sphere* sphere_ptr2 = new Sphere;
   sphere_ptr2->set_center(16, 40, 30);
   sphere_ptr2->set_radius(30.0);
-  sphere_ptr2->set_color(0,.5,0);
-//  sphere_ptr2->set_material(Matte);
+//  sphere_ptr2->set_color(0,.5,0);
+  sphere_ptr2->set_material(phong_ptr1);
   add_object(sphere_ptr2);
-*/
+
 /*
 //add plane
   Plane* plane_ptr = new Plane(Point3D(0,0,0), Normal(1,0,1));
@@ -90,18 +103,80 @@ World::build(void){
 //  plane_ptr->set_material(Matte);
   add_object(plane_ptr);
 */
-/*
+
   //add triangle
     Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
-    triangle_ptr->set_color(1,1,1);
-//    triangle_ptr->set_material(Matte);
+//    triangle_ptr->set_color(1,1,1);
+    triangle_ptr->set_material(phong_ptr1);
     add_object(triangle_ptr);
-*/
+
+} //end reflective
+
+void
+World::buildDiffuse(void){
+  background_color = black;
+
+                                            //lights
+  tracer_ptr = new RayCast(this);
+  Ambient* ambient_ptr = new Ambient;
+  ambient_ptr->scale_radiance(1.0);
+  set_ambient_light(ambient_ptr);
+  Directional* directional_ptr = new Directional;
+  directional_ptr->set_direction(-1, 0.5, -0.3);
+  add_light(directional_ptr);
+
+  int num_samples = 10;     //samples to use for the sampling
+  vp.set_hres(200);
+  vp.set_vres(200);
+  vp.set_s(0.8);
+  vp.set_gamma(1.0);
+  pixels.resize(vp.hres * vp.vres); //resize pixels array again
+  vp.set_sampler(new Multijittered(num_samples));
+
+  //set up camera
+  Pinhole* pinhole_ptr = new Pinhole;
+  pinhole_ptr->set_eye(0, 0, 0);
+  pinhole_ptr->set_lookat(15, 10, 10);
+  pinhole_ptr->set_view_distance(40);
+  pinhole_ptr->set_exposure_time(1);
+  pinhole_ptr->compute_uvw();
+  set_camera(pinhole_ptr);
+//add sphere
+  Sphere* sphere_ptr = new Sphere;
+  sphere_ptr->set_center(15, 10, 20);
+  sphere_ptr->set_radius(10.0);
+
+                                                  //diffuse
+  Matte* matte_ptr1 = new Matte;
+  matte_ptr1->set_ka(0.5);
+  matte_ptr1->set_cd(0,1,0);  //red
+  matte_ptr1->set_kd(0.8);
+
+  sphere_ptr->set_material(matte_ptr1);
+  add_object(sphere_ptr);
+
+  Sphere* sphere_ptr2 = new Sphere;
+  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_radius(30.0);
+//  sphere_ptr2->set_color(0,.5,0);
+  sphere_ptr2->set_material(matte_ptr1);
+  add_object(sphere_ptr2);
+
+    Triangle* triangle_ptr = new Triangle(Point3D(-30,0,20), Point3D(0,0,20), Point3D(0,40,40));
+    triangle_ptr->set_material(matte_ptr1);
+    add_object(triangle_ptr);
+
 }
+
 
 void
 World::add_object(GeometricObject* object_ptr){
   objects.push_back(object_ptr);
+}
+
+void
+World::add_light(Light* light_ptr){
+  lights.push_back(light_ptr);
 }
 
 void

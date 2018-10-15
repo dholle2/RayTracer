@@ -25,7 +25,7 @@ Directional::set_direction(float x, float y, float z){
 }
 
 Vector3D
-Directional::get_direction(void){
+Directional::get_direction(ShadeRec& sr){
   return dir;
 }
 

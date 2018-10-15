@@ -6,25 +6,27 @@
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-#include "RGBColor.h"
-#include "Vector3D.h"
-#include "Point3D.h"
-#include "Normal.h"
+#include "../Utilities/RGBColor.h"
+#include "../Utilities/Vector3D.h"
+#include "../Utilities/Point3D.h"
+#include "../Utilities/Normal.h"
 #include "Light.h"
-#include "Material.h"
+#include "../Utilities/Material.h"
 #include "GeometricObject.h"
-class Pointlight: public Light {
+class PointLight: public Light {
 public:
 
-      AreaLight(void);
-      AreaLight(const AreaLight& al);
-      virtual AreaLight*
-      clone(void);
-      virtual
-      ~AreaLight(void);
+      PointLight(void);
 
-      AreaLight&
-      operator= (const AreaLight& rhs);
+      PointLight(const PointLight& al);
+      virtual PointLight*
+      clone(void);
+
+      virtual
+      ~PointLight(void);
+
+      PointLight&
+      operator= (const PointLight& rhs);
 
       void
       set_object(GeometricObject* obj_ptr);
@@ -40,7 +42,7 @@ class Pointlight: public Light {
 
       virtual float
       G(const ShadeRec& sr) const;
-
+
       virtual float
       pdf(const ShadeRec& sr) const;
 
@@ -54,7 +56,7 @@ class Pointlight: public Light {
       inline
 
       void
-      AreaLight::set_object(GeometricObject* obj_ptr) {
+      PointLight::set_object(GeometricObject* obj_ptr) {
         	object_ptr = obj_ptr;	material_ptr = object_ptr->get_material();
       }
 

@@ -22,7 +22,7 @@ class Directional: public Light {
   set_direction(float x, float y, float z);
 
   virtual Vector3D
-  get_direction(void);
+  get_direction(ShadeRec& sr);
 
   virtual RGBColor
   L(ShadeRec& sr);

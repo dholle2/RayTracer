@@ -17,16 +17,18 @@ RayCast::~RayCast(void) {}
 RGBColor
 RayCast::trace_ray(const Ray ray, const int depth)  {
 
-	cout << "starting trace ray!" << endl;
+//	cout << "starting trace ray!" << endl;
 	ShadeRec sr(world_ptr->hit_objects(ray));
-
-	cout << "shade rec set, sir!" << endl;
+//	cout << "shade rec set, sir!" << endl;
 
 	if (sr.hit_an_object) {
-		cout << "HIT" << endl;
+//		cout << "HIT" << endl;
 		sr.ray = ray;
-//		cout << sr.material_ptr-> << endl;
-		return (sr.material_ptr->shade(sr));
+//		cout << "sr.ray = ray done!" << endl;
+		if(sr.material_ptr != NULL){
+			return (sr.material_ptr->shade(sr));
+		}else
+			return red;
 	}
 	else
 		return (world_ptr->background_color);

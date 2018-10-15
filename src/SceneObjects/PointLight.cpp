@@ -2,9 +2,9 @@
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
-/*
 
-#include "Pointlight.h"
+/*
+#include "PointLight.h"
 
 // ---------------------------------------------------------------- default constructor
 
@@ -141,5 +141,4 @@ float
 Pointlight::pdf(const ShadeRec& sr) const {
 	return (object_ptr->pdf(sr));
 }
-
 */

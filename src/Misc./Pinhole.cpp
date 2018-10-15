@@ -41,7 +41,7 @@ Pinhole::ray_direction(const Point2D& p) const {
 }
 
 void
-Pinhole::render_scene(World& w) {
+Pinhole::render_scene(World& w, string picName) {
 	RGBColor	L;
 	ViewPlane	vp(w.vp);
 	Ray			ray;
@@ -74,7 +74,7 @@ Pinhole::render_scene(World& w) {
 		}
 //		cout << "up.x: " << up.x << " up.y: " << up.y << " up.z " << up.z << endl;
 		cout << "all pixels printed" << endl;
-		string fileName = "pinhole";
+		string fileName = picName;
 		w.save_image(fileName);
 }
 

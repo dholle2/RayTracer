@@ -3,7 +3,9 @@
 
 #include "../Utilities/Point3D.h"
 #include "../Utilities/Vector3D.h"
+#include <string>
 
+using namespace std;
 class World;
 
 class Camera{
@@ -18,9 +20,13 @@ class Camera{
     Vector3D up, u, v, w;
     float exposure_time;
 
-
+/*
     virtual void
 		render_scene(World& w) =0;
+*/
+    virtual void
+		render_scene(World& w, string picName) =0;
+
     void
 		set_eye(const Point3D& p);
 		void

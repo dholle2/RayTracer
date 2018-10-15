@@ -47,7 +47,10 @@ class World{
     hit_objects(const Ray& ray);
 
     void
-    build(void);
+    buildDiffuse(void);
+
+    void
+    buildReflective(void);
 
     void
     render_scene_ortho(void);

@@ -3,7 +3,9 @@
 
 #include "../Utilities/Point2D.h"
 #include "Camera.h"
+#include <string>
 
+using namespace std;
 
 class Pinhole: public Camera {
 	public:
@@ -19,7 +21,7 @@ class Pinhole: public Camera {
 		ray_direction(const Point2D& p) const;
 
 		virtual void
-		render_scene(World& w);
+		render_scene(World& w, string picName);
 
     void
     set_zoom(float zoom_factor);
