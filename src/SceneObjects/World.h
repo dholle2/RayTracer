@@ -11,6 +11,7 @@
 #include "../Misc./Camera.h"
 //#include "../Misc./BuildRedSphere.h"
 #include "Ambient.h"
+#include "AmbientOccluder.h"
 
 using namespace std;
 class World{
@@ -38,7 +39,7 @@ class World{
     add_light(Light* light_ptr);
 
     void
-    set_ambient_light(Ambient* ambient);
+    set_ambient_light(AmbientOccluder* ambient);
 
     ShadeRec
     hit_bare_bones_objects(const Ray& ray);

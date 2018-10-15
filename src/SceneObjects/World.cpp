@@ -36,7 +36,10 @@ World::World(){
 
     //lights
   tracer_ptr = new RayCast(this);
-  Ambient* ambient_ptr = new Ambient;
+//  Ambient* ambient_ptr = new Ambient;
+//  ambient_ptr->scale_radiance(0.6);
+//  set_ambient_light(ambient_ptr);
+  AmbientOccluder* ambient_ptr = new AmbientOccluder;
   ambient_ptr->scale_radiance(0.6);
   set_ambient_light(ambient_ptr);
 //  Directional* directional_ptr = new Directional;
@@ -198,9 +201,14 @@ void
 World::set_camera(Camera* camera){
   camera_ptr = camera;
 }
-
+/*
 void
 World::set_ambient_light(Ambient* ambient){
+  ambient_ptr = ambient;
+}
+*/
+void
+World::set_ambient_light(AmbientOccluder* ambient){
   ambient_ptr = ambient;
 }
 
