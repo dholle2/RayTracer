@@ -11,7 +11,8 @@
 #include "../Utilities/Normal.h"
 #include "../Utilities/Ray.h"
 #include "../Utilities/ShadeRec.h"
-//#include "../Utilities/Material.h"
+#include "../Utilities/BBox.h"
+#include "../Utilities/Normal.h"
 
 class Material;
 
@@ -26,8 +27,8 @@ class GeometricObject{
     set_material(Material* m);
 
 
-//    virtual GeometricObject*
-//		clone(void) const;
+    virtual GeometricObject*
+		clone(void) const;
 
 //constructors
     GeometricObject(void);
@@ -47,10 +48,19 @@ class GeometricObject{
     set_color(float x, float y, float z);
 
     virtual bool
-    shadow_hit(const Ray& ray, float& tmin) = 0;    //for each object, same as hit without shading
+    shadow_hit(const Ray& ray, float& tmin);    //for each object, same as hit without shading
 
     mutable Material*   material_ptr;
     RGBColor color;
+    BBox bbox;
+    Normal normal;
+
+    virtual Normal
+    get_normal(void);
+
+    virtual BBox
+    get_bounding_box(void);
+
 };
 
 #endif

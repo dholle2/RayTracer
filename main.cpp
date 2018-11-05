@@ -1,6 +1,7 @@
 #include "src/SceneObjects/World.h"
 #include <iostream>
 #include <string>
+#include <time.h>
 //using namespace std;
 int
 main(void){
@@ -25,17 +26,28 @@ cout << "did perspective, sir!" << endl;
   w3.render_scene_multijittered();
   cout << "did multijittered sampling, sir!" << endl;
 */
-
+/*
   World w4;
   w4.buildReflective();
   w4.camera_ptr->render_scene(w4, "Reflective");
   cout << "did camera, sir!" << endl;
-
+*/
+/*
   World w5;
-  w5.buildDiffuse();
-  w5.camera_ptr->render_scene(w5, "Diffuse");
+  w5.buildMesh();
+  time_t before;
+  time(&before);
+  w5.camera_ptr->render_scene(w5, "Mesh");
+  time_t after;
+  time(&after);
   cout << "did camera, sir!" << endl;
+  cout << "seconds: " << difftime(after, before) << endl;
+*/
+World w5;
+w5.buildMirror();
+w5.camera_ptr->render_scene(w5, "Mirror");
+cout << "did camera, sir!" << endl;
 
-  return 0;
+return 0;
 
 }

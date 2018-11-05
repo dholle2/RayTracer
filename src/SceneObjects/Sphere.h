@@ -32,6 +32,9 @@ class Sphere: public GeometricObject {
 		virtual bool
 		shadow_hit(const Ray& ray, float& tmin);
 
+		BBox
+	  get_bounding_box(void);
+
   private:
 
     Point3D center;

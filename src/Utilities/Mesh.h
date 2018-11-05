@@ -19,11 +19,13 @@
 // Each mesh triangle also has a pointer to the mesh
 // The Mesh class does not inherit from GeometricObject
 
-/*
+
 #include <vector>
 
 #include "Point3D.h"
 #include "Normal.h"
+
+using namespace std;
 
 class Mesh {
 	public:
@@ -47,6 +49,3 @@ class Mesh {
 };
 
 #endif
-
-
-*/

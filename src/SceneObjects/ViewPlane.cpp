@@ -62,3 +62,8 @@ ViewPlane::set_samples(const int n){
     cout << "should set to regular sampler, but thats not made yet!" << endl;
   }
 }
+
+void
+ViewPlane::set_max_depth(int n){
+  max_depth = n;
+}

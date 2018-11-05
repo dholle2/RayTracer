@@ -19,10 +19,12 @@ class Plane: public GeometricObject{
     virtual bool
     shadow_hit(const Ray& ray, float& tmin);
 
+//    virtual BBox
+//    get_bounding_box(void);
+
   private:
 
     Point3D point;  //point plane passes
-
     Normal  normal; //plane normal
     static const double kEpsilon;
 };

@@ -11,7 +11,7 @@
 #include "../Misc./Camera.h"
 //#include "../Misc./BuildRedSphere.h"
 #include "Ambient.h"
-#include "AmbientOccluder.h"
+#include "Grid.h"
 
 using namespace std;
 class World{
@@ -39,7 +39,7 @@ class World{
     add_light(Light* light_ptr);
 
     void
-    set_ambient_light(AmbientOccluder* ambient);
+    set_ambient_light(Light* ambient);
 
     ShadeRec
     hit_bare_bones_objects(const Ray& ray);
@@ -52,6 +52,12 @@ class World{
 
     void
     buildReflective(void);
+
+    void
+    buildMirror(void);
+
+    void
+    buildMesh(void);
 
     void
     render_scene_ortho(void);
@@ -70,6 +76,12 @@ class World{
       const int column,
       const RGBColor& pixel_color);
       void save_image(const string& outputFile) const;
+
+    RGBColor
+    clamp_to_color(const RGBColor& raw_color);
+
+    RGBColor
+    max_to_one(const RGBColor& c);
 };
 
 

@@ -40,6 +40,9 @@ class PointLight: public Light {
 
       virtual bool
       in_shadow(const Ray& ray, const ShadeRec& sr);
+
+      virtual void
+      scale_radiance(float b);
 /*
       virtual float
       G(const ShadeRec& sr) const;

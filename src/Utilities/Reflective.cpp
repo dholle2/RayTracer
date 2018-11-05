@@ -76,16 +76,16 @@ Reflective::shade(ShadeRec& sr) {
 //	cout << "Phong Color: " << L.r << L.g << L.b << endl;
 	Vector3D wo = -sr.ray.d;
 	Vector3D wi;
-	cout << "before fr" << endl;
+//	cout << "before fr" << endl;
 	RGBColor fr = reflective_brdf->sample_f(sr, wo, wi);
-	cout << "after fr" << endl;
+//	cout << "after fr" << endl;
 	Ray reflected_ray(sr.hit_point, wi);
-cout << "Ray reflected_ray(sr.hit_point, wi) DONE" << endl;
+//cout << "Ray reflected_ray(sr.hit_point, wi) DONE" << endl;
 
-//	reflected_ray.depth = sr.depth + 1;		for transparency and reflections later
+	//reflected_ray.depth = sr.depth + 1;		//for transparency and reflections later
 // disabling this line seems to result in infinite loops
 
 	L += fr * sr.w.tracer_ptr->trace_ray(reflected_ray, sr.depth + 1) * (sr.normal * wi);
-			cout << "Reflect Color: " << L.r << L.g << L.b << endl;
+		//	cout << "Reflect Color: " << L.r << L.g << L.b << endl;
 	return (L);
 }

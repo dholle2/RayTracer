@@ -1,6 +1,9 @@
 #include <algorithm>
 #include "../Utilities/Constants.h"
 #include "Sampler.h"
+#include <iostream>
+
+using namespace std;
 
 Sampler::Sampler(void)
 : 	num_samples(1),
@@ -51,9 +54,15 @@ Sampler::sample_unit_square(void){
 
 Point3D
 Sampler::sample_hemisphere(void) {
-	if (count % num_samples == 0)  									// start of a new pixel
-		jump = (rand_int() % num_sets) * num_samples;
 
+//  cout << "count: " << count << endl;
+//  cout << "num samples: " << num_samples << endl;
+	if (count % num_samples == 0){								// start of a new pixel
+//    cout << "SETTING JUMP" << endl;
+    jump = (rand_int() % num_sets) * num_samples;
+//    cout << "JUMP SET" << endl;
+
+  }
 	return (hemisphere_samples[jump + shuffled_indices[jump + count++ % num_samples]]);
 }
 

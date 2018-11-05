@@ -12,6 +12,7 @@ class ViewPlane{
     float inv_gamma;
     int num_samples;
     Sampler* sampler_ptr;
+    int max_depth;
 
     void set_hres(int h);
     void set_vres(int v);
@@ -19,6 +20,7 @@ class ViewPlane{
     void set_gamma(float g);
     void set_sampler(Sampler* sp);
     void set_samples(const int n);
+    void set_max_depth(int n);
     ViewPlane(void);
 };
 

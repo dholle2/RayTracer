@@ -29,6 +29,14 @@ Triangle::Triangle (void)
   	normal.normalize();
   }
 
+	Normal
+	Triangle::get_normal(void){
+		normal = Normal();
+		normal.normalize();
+		return normal;
+	}
+
+
 	Triangle*
 	Triangle::clone(void) const {
 		return (new Triangle(*this));
@@ -112,4 +120,13 @@ Triangle::Triangle (void)
     	tmin 	= t;
     	return (true);
     }
+	}
+
+	BBox
+	Triangle::get_bounding_box(void) {
+		double delta = 0.0001;  // to avoid degenerate bounding boxes
+
+		return(BBox(min(min(p1.x, p2.x), p3.x) - delta, max(max(p1.x, p2.x), p3.x) + delta,
+					min(min(p1.y, p2.y), p3.y) - delta, max(max(p1.y, p2.y), p3.y) + delta,
+					min(min(p1.z, p2.z), p3.z) - delta, max(max(p1.z, p2.z), p3.z) + delta));
 	}

@@ -1,5 +1,7 @@
 #include "AmbientOccluder.h"
+#include <iostream>
 
+using namespace std;
 
 
 AmbientOccluder::AmbientOccluder(void)
@@ -19,10 +21,10 @@ AmbientOccluder::casts_shadows(void){
 
 void
 AmbientOccluder::set_sampler(Sampler* s_ptr){
-  if(sampler_ptr){
-    delete sampler_ptr;
-    sampler_ptr = NULL;
-  }
+//  if(sampler_ptr){
+//    delete sampler_ptr;
+//    sampler_ptr = NULL;
+//  }
   sampler_ptr = s_ptr;
   sampler_ptr->map_samples_to_hemisphere(1);
 }
@@ -37,7 +39,7 @@ bool
 AmbientOccluder::in_shadow(const Ray& ray, const ShadeRec& sr){
   float t;
   int num_objects = sr.w.objects.size();
-
+//    cout << "AmbientOccluder Objects: " << num_objects << endl;
   for(int j = 0; j < num_objects; j++){
     if(sr.w.objects[j]->shadow_hit(ray, t))
       return true;

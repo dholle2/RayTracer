@@ -119,3 +119,12 @@ const double Sphere::kEpsilon = .001;
     }
     return (false);
   }
+
+  BBox
+  Sphere::get_bounding_box(void) {
+    double delta = 0.0000;  // to avoid degenerate bounding boxes
+
+    return(BBox(center.x - radius - delta, center.x + radius + delta,
+          center.y - radius - delta, center.y + radius + delta,
+         center.z - radius - delta, center.z + radius + delta));
+  }

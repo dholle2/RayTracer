@@ -26,12 +26,12 @@
   GeometricObject::set_material(Material* m) {
   	material_ptr = m;
   }
-/*
+
   GeometricObject*
   GeometricObject::clone(void) const {
   	return (new GeometricObject(*this));
   }
-*/
+
   GeometricObject::~GeometricObject(void)
   {}
 
@@ -53,3 +53,20 @@
   GeometricObject::set_color(float x, float y, float z){
     color = RGBColor(x, y, z);
   }
+
+  bool
+  GeometricObject::shadow_hit(const Ray& ray, float& tmin){
+    return false;
+  }
+
+  BBox
+  GeometricObject::get_bounding_box(void){
+    bbox = BBox();
+    return bbox;
+  }
+
+    Normal
+    GeometricObject::get_normal(void){
+      normal = Normal();
+      return normal;
+    }

@@ -24,6 +24,13 @@ class Triangle: public GeometricObject {
 
     Point3D p1, p2, p3;
     Normal normal;
+
+		virtual BBox
+		get_bounding_box(void);
+
+		virtual Normal
+		get_normal(void);
+
   };
 
 #endif

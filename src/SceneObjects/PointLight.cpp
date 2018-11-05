@@ -2,9 +2,12 @@
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
+#include <iostream>
 
 
 #include "PointLight.h"
+
+using namespace std;
 
 // ---------------------------------------------------------------- default constructor
 
@@ -135,6 +138,7 @@ bool
 PointLight::in_shadow(const Ray& ray, const ShadeRec& sr) {
 	float t;
 	int num_objects = sr.w.objects.size();
+//	cout << "Pointlight objects: " << num_objects << endl;
 	float ts = (sample_point - ray.o) * ray.d;
 
 	for (int j = 0; j < num_objects; j++)
@@ -149,6 +153,10 @@ PointLight::casts_shadows(void){
   return true;
 }
 
+void
+PointLight::scale_radiance(float b) {
+	ls = b;
+}
 
 // ---------------------------------------------------------------- G
 // G is part of the geometric factor

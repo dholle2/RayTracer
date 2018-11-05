@@ -26,6 +26,7 @@ RayCast::trace_ray(const Ray ray, const int depth)  {
 		sr.ray = ray;
 //		cout << "sr.ray = ray done!" << endl;
 		if(sr.material_ptr != NULL){
+//			cout << "attempting to shade" << endl;
 			return (sr.material_ptr->shade(sr));
 		}else
 			return red;
