@@ -1,5 +1,6 @@
-#ifndef __WHITTED__
-#define __WHITTED__
+/*
+#ifndef __AREA_LIGHTING__
+#define __AREA_LIGHTING__
 
 
 // 	Copyright (C) Kevin Suffern 2000-2007.
@@ -10,21 +11,21 @@
 
 #include "Tracer.h"
 
-class Whitted: public Tracer {
+class AreaLighting: public Tracer {
 	public:
 
-		Whitted(void);
+		AreaLighting(void);
 
-		Whitted(World* _worldPtr);
+		AreaLighting(World* _worldPtr);
 
 		virtual
-		~Whitted(void);
-
-		virtual void
-		kill(void);
+		~AreaLighting(void);
 
 		virtual RGBColor
-		trace_ray(const Ray ray, const int depth) ;
+		trace_ray(const Ray ray, const int depth) const;
+
 };
 
 #endif
+
+*/

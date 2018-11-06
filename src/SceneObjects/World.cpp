@@ -23,6 +23,7 @@
 #include "../Utilities/Reflective.h"
 #include "../Utilities/Phong.h"
 #include "../Utilities/PerfectSpecular.h"
+#include "../Utilities/Transparent.h"
 #include "../Utilities/Material.h"
 #include "../Utilities/Matte.h"
 #include "Instance.h"
@@ -36,14 +37,14 @@ World::World(){
 //  tracer_ptr = new MultipleObjects();
   pixels.resize(vp.hres * vp.vres);
   //ambient_ptr = new Ambient();
-  tracer_ptr = new RayCast(this);
-//  tracer_ptr = new Whitted(this);
+//  tracer_ptr = new RayCast(this);
+  tracer_ptr = new Whitted(this);
     //lights
 //  Ambient* ambient_ptr = new Ambient;
 //  ambient_ptr->scale_radiance(0.6);
 //  set_ambient_light(ambient_ptr);
 
-  int num_samples = 16;     //samples to use for the sampling
+  int num_samples = 30;     //samples to use for the sampling
 
   Multijittered* sampler_ptr = new Multijittered(num_samples);
   AmbientOccluder* ambient_ptr = new AmbientOccluder;
@@ -66,7 +67,7 @@ World::World(){
   vp.set_gamma(1.0);
   pixels.resize(vp.hres * vp.vres); //resize pixels array again
   vp.set_sampler(sampler_ptr);
-  vp.set_max_depth(0);
+  vp.set_max_depth(15);
 
   //set up camera
   Pinhole* pinhole_ptr = new Pinhole;
@@ -123,11 +124,19 @@ reflect_ptr1->set_exp(100);
 reflect_ptr1->set_kr(.75);
 reflect_ptr1->set_cr(1,1,1);  //reflect white
 
+                                              //Transparent
+Transparent* glass_ptr1 = new Transparent;
+glass_ptr1->set_ks(.9);
+glass_ptr1->set_exp(1000);
+glass_ptr1->set_ior(1);
+glass_ptr1->set_kr(.1);
+glass_ptr1->set_kt(.9);
+
   //add sphere
   Sphere* sphere_ptr0 = new Sphere;
   sphere_ptr0->set_center(10, 10, 10);
   sphere_ptr0->set_radius(10.0);
-  sphere_ptr0->set_material(phong_ptr1);
+  sphere_ptr0->set_material(glass_ptr1);
 //  add_object(sphere_ptr);
   grid_ptr->add_object(sphere_ptr0);
 

@@ -55,20 +55,23 @@ Pinhole::render_scene(World& w, string picName) {
 	for (int r = 0; r < vp.vres; r++)			// up
 		for (int c = 0; c < vp.hres; c++) {		// across
 			L = black;
-
 			for (int p = 0; p < n; p++)			// up pixel
 				for (int q = 0; q < n; q++) {	// across pixel
 					pp.x = vp.s * (c - 0.5 * vp.hres + (q + 0.5) / n);
 					pp.y = vp.s * (r - 0.5 * vp.vres + (p + 0.5) / n);
 					ray.d = ray_direction(pp);
+	//				w.tracer_ptr->kill();
 					L += w.tracer_ptr->trace_ray(ray, depth);
+	//				cout << "Color: " << L.r << L.g << L.b << endl;
 				}
 //				ray.d.z = ray.d.z;
 //				cout << "RAY DIRECTION: x " << ray.d.x << " y " << ray.d.y << " z " << ray.d.z << endl;
 //				cout << "RAY ORIGIN: x" << ray.o.x << " y " << ray.o.y << " z " << ray.o.z << endl;
+//			cout << "Color: " << L.r << L.g << L.b << endl;
 			L /= vp.num_samples;
+//			cout << "Color: " << L.r << L.g << L.b << endl;
 			L *= exposure_time;
-	//		cout << "Color: " << L.r << L.g << L.b << endl;
+//			cout << "Color: " << L.r << L.g << L.b << endl;
 //	cout << exposure_time << endl;
 			w.display_pixel(r, c, L);
 		}

@@ -1,4 +1,7 @@
 #include "Tracer.h"
+#include <iostream>
+
+using namespace std;
 
 Tracer::Tracer(void)
 	: world_ptr(NULL)
@@ -21,4 +24,9 @@ Tracer::trace_ray(const Ray& ray) const{
 RGBColor
 Tracer::trace_ray(const Ray ray, const int depth){
 	return white;
+}
+
+void
+Tracer::kill(void){
+	cout << "Tracer" << endl;
 }

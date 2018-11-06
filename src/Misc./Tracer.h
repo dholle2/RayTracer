@@ -24,7 +24,8 @@ class Tracer {
 /*		virtual RGBColor			// RayCast
 		trace_ray(const Ray ray, float& tmin, const int depth);
 */
-
+		virtual void
+		kill(void);
 
     virtual
     ~Tracer(void);
