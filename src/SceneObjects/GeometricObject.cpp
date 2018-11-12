@@ -1,5 +1,6 @@
 #include "GeometricObject.h"
-
+#include <iostream>
+using namespace std;
 
   GeometricObject::GeometricObject(void)
   : color(black)
@@ -65,8 +66,26 @@
     return bbox;
   }
 
-    Normal
-    GeometricObject::get_normal(void){
-      normal = Normal();
-      return normal;
-    }
+  Normal
+  GeometricObject::get_normal(void){
+    normal = Normal();
+    return normal;
+  }
+
+  Normal
+  GeometricObject::get_normal(const Point3D& point){
+//    cout << "Geo Normal" << endl;
+    normal = Normal();
+    return normal;
+  }
+
+  Point3D
+  GeometricObject::sample(void){
+    return Point3D(1,1,1);
+  }
+
+  float
+  GeometricObject::pdf(const ShadeRec& sr){
+  //  cout << "wrong pdf" << endl;
+    return 1.0;
+  }

@@ -19,7 +19,7 @@ Material::Material(const Material& m) {}
 
 // ---------------------------------------------------------------- assignment operator
 
-Material& 
+Material&
 Material::operator= (const Material& rhs) {
 	if (this == &rhs)
 		return (*this);
@@ -41,6 +41,12 @@ Material::shade(ShadeRec& sr) {
 	return (black);
 }
 
+RGBColor
+Material::area_light_shade(ShadeRec& sr) {
+	return (black);
+}
 
-
-
+RGBColor
+Material::get_Le(ShadeRec& sr){
+	return RGBColor(1.0, 1.0, 1.0);
+}

@@ -37,7 +37,7 @@ class GeometricObject{
     virtual ~GeometricObject(void);
   //  virtual bool hit(const Ray& ray, double& t, ShadeRec& s);
 
-   virtual void add_object(GeometricObject* object_ptr);
+    virtual void add_object(GeometricObject* object_ptr);
 
     RGBColor get_color(void);
 
@@ -57,6 +57,15 @@ class GeometricObject{
 
     virtual Normal
     get_normal(void);
+
+    virtual Normal
+    get_normal(const Point3D& point);
+
+    virtual Point3D
+    sample(void);
+
+    virtual float
+    pdf(const ShadeRec& sr);
 
     virtual BBox
     get_bounding_box(void);

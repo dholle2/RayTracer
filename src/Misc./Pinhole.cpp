@@ -48,6 +48,7 @@ Pinhole::render_scene(World& w, string picName) {
 	int 		depth = 0;
 	Point2D 	pp;		// sample point on a pixel
 	int n = (int)sqrt((float)vp.num_samples);
+	int num_rays = 0;
 
 	vp.s /= zoom;
 	ray.o = eye;
@@ -73,9 +74,12 @@ Pinhole::render_scene(World& w, string picName) {
 			L *= exposure_time;
 //			cout << "Color: " << L.r << L.g << L.b << endl;
 //	cout << exposure_time << endl;
+
+			num_rays ++;	//count rays
 			w.display_pixel(r, c, L);
 		}
 //		cout << "up.x: " << up.x << " up.y: " << up.y << " up.z " << up.z << endl;
+	cout << "Rays used: " << num_rays << endl;
 		cout << "all pixels printed" << endl;
 		string fileName = picName;
 		w.save_image(fileName);

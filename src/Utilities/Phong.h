@@ -25,6 +25,9 @@ class Phong: public Material {
       virtual RGBColor
       shade(ShadeRec& s);
 
+      virtual RGBColor
+      area_light_shade(ShadeRec& s);
+
       Lambertian* ambient_brdf;
       Lambertian* diffuse_brdf;
       GlossySpecular* specular_brdf;

@@ -26,6 +26,12 @@ class Light {
 
 		virtual RGBColor
 		L(ShadeRec& sr);
+
+		virtual float
+		G(const ShadeRec& sr) const;
+
+		virtual float
+		pdf(const ShadeRec& sr) const;
   };
 
   #endif

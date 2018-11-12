@@ -10,19 +10,23 @@
 #include "../Utilities/Ray.h"
 #include "World.h"
 #include "Sphere.h"
+#include "Rectangle.h"
 #include "Plane.h"
 #include "Triangle.h"
 #include "Directional.h"
 #include "PointLight.h"
+#include "AreaLight.h"
 #include "../Misc./MultipleObjects.h"
 #include "../Misc./RayCast.h"
 #include "../Misc./Whitted.h"
+#include "../Misc./AreaLighting.h"
 #include "../Misc./Pinhole.h"
 #include "../Misc./Multijittered.h"
 #include "GeometricObject.h"
 #include "../Utilities/Reflective.h"
 #include "../Utilities/Phong.h"
 #include "../Utilities/PerfectSpecular.h"
+#include "../Utilities/Emissive.h"
 #include "../Utilities/Transparent.h"
 #include "../Utilities/Material.h"
 #include "../Utilities/Matte.h"
@@ -38,7 +42,9 @@ World::World(){
   pixels.resize(vp.hres * vp.vres);
   //ambient_ptr = new Ambient();
 //  tracer_ptr = new RayCast(this);
-  tracer_ptr = new Whitted(this);
+//  tracer_ptr = new Whitted(this);
+/*
+    tracer_ptr = new AreaLighting(this);
     //lights
 //  Ambient* ambient_ptr = new Ambient;
 //  ambient_ptr->scale_radiance(0.6);
@@ -55,11 +61,11 @@ World::World(){
 //  directional_ptr->set_direction(0, 0, -1);
 //  directional_ptr->set_ls(1.1);
 //  add_light(directional_ptr);
-  PointLight* pointlight_ptr = new PointLight(0,-5,10);
-  pointlight_ptr->scale_radiance(2);
+//  PointLight* pointlight_ptr = new PointLight(-5,-5,10);
+//  pointlight_ptr->scale_radiance(2);
 //  pointlight_ptr->set_direction(0, 0, -1);
 //  pointlight_ptr->set_ls(1.1);
-  add_light(pointlight_ptr);
+//  add_light(pointlight_ptr);
 
   vp.set_hres(300);
   vp.set_vres(300);
@@ -68,14 +74,14 @@ World::World(){
   pixels.resize(vp.hres * vp.vres); //resize pixels array again
   vp.set_sampler(sampler_ptr);
   vp.set_max_depth(15);
-
+*/
   //set up camera
   Pinhole* pinhole_ptr = new Pinhole;
   //  pinhole_ptr->set_eye(60, 30, 170);
   //  pinhole_ptr->set_lookat(-60,-180, 40);
   pinhole_ptr->set_eye(-20, 10, 0);
   pinhole_ptr->set_lookat(0, 30, 0);
-  pinhole_ptr->set_view_distance(30);
+  pinhole_ptr->set_view_distance(40);
   pinhole_ptr->set_exposure_time(1);
   //  pingole_ptr->set_vpd()
   pinhole_ptr->compute_uvw();
@@ -83,8 +89,119 @@ World::World(){
 }
 
 void
+World::buildAreaLight(void){
+  Grid* grid_ptr = new Grid;
+  tracer_ptr = new AreaLighting(this);
+
+int num_samples = 60;     //samples to use for the sampling
+
+Multijittered* sampler_ptr = new Multijittered(num_samples);
+AmbientOccluder* ambient_ptr = new AmbientOccluder;
+ambient_ptr->scale_radiance(.5);
+ambient_ptr->set_sampler(sampler_ptr);
+set_ambient_light(ambient_ptr);
+
+vp.set_hres(300);
+vp.set_vres(300);
+vp.set_s(1.2);
+vp.set_gamma(1.0);
+pixels.resize(vp.hres * vp.vres); //resize pixels array again
+vp.set_sampler(sampler_ptr);
+vp.set_max_depth(15);
+
+  Phong* phong_ptr1 = new Phong;
+  phong_ptr1->set_ks(1.2);
+  phong_ptr1->set_cs(0,0,1);
+  phong_ptr1->set_exp(2);
+  phong_ptr1->set_ka(0.5);
+  phong_ptr1->set_cd(0,1,0);  //green
+  phong_ptr1->set_kd(0.8);
+
+  Phong* phong_ptr2 = new Phong;
+  phong_ptr2->set_ks(1.2);
+  phong_ptr2->set_cs(0,0,1);
+  phong_ptr2->set_exp(2);
+  phong_ptr2->set_ka(0.5);
+  phong_ptr2->set_cd(1,0,0);  //red
+  phong_ptr2->set_kd(0.8);
+
+  Phong* phong_ptr3 = new Phong;
+  phong_ptr3->set_ks(1.2);
+  phong_ptr3->set_cs(0,0,1);
+  phong_ptr3->set_exp(2);
+  phong_ptr3->set_ka(0.5);
+  phong_ptr3->set_cd(1,1,0);  //yellow
+  phong_ptr3->set_kd(0.8);
+
+  //add sphere
+  Sphere* sphere_ptr0 = new Sphere;
+  sphere_ptr0->set_center(10, 10, 10);
+  sphere_ptr0->set_radius(10.0);
+  sphere_ptr0->set_material(phong_ptr2);
+//  add_object(sphere_ptr);
+  grid_ptr->add_object(sphere_ptr0);
+/*
+  Sphere* sphere_ptr1 = new Sphere;
+  sphere_ptr1->set_center(-15, 60, 10);
+  sphere_ptr1->set_radius(10.0);
+  sphere_ptr1->set_material(phong_ptr1);
+//  add_object(sphere_ptr);
+  grid_ptr->add_object(sphere_ptr1);
+*/
+  Sphere* sphere_ptr2 = new Sphere;
+  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_radius(30.0);
+  sphere_ptr2->set_material(phong_ptr1);
+//  add_object(sphere_ptr2);
+  grid_ptr->add_object(sphere_ptr2);
+
+  Sphere* sphere_ptr3 = new Sphere;
+  sphere_ptr3->set_center(30, 20, 40);
+  sphere_ptr3->set_radius(30.0);
+  sphere_ptr3->set_material(phong_ptr3);
+//  add_object(sphere_ptr3);
+  grid_ptr->add_object(sphere_ptr3);
+
+  Emissive* emissive_ptr = new Emissive;
+  emissive_ptr->scale_radiance(10.0);
+  emissive_ptr->set_ce(white);
+
+  float width = 40.0;
+  float height = 40.0;
+  Point3D center(-15, 60, 10);	// center of each area light (rectangular, disk, and spherical)
+	Point3D p0(-0.5 * width, center.y - 0.5 * height, center.z);
+	Vector3D a(width, 0.0, 0.0);
+	Vector3D b(0.0, height, 0.0);
+	Normal normal(1, -.5, 0);
+  Rectangle* rectangle_ptr = new Rectangle(p0, a, b, normal);
+  rectangle_ptr->set_material(emissive_ptr);
+  rectangle_ptr->set_sampler(sampler_ptr);
+//  rectangle_ptr->set_shadows(false);
+  grid_ptr->add_object(rectangle_ptr);
+
+
+  AreaLight* area_light_ptr = new AreaLight;
+  area_light_ptr->set_object(rectangle_ptr);
+//  area_light_ptr->set_shadows(true);
+  add_light(area_light_ptr);
+
+
+
+//call after grid is done being added to
+  grid_ptr->setup_cells();
+  add_object(grid_ptr);
+
+} //end reflective
+
+
+void
 World::buildMirror(void){
-  background_color = black;
+  background_color = RGBColor(1,1,1);
+  PointLight* pointlight_ptr = new PointLight(-5,-5,10);
+  pointlight_ptr->scale_radiance(2);
+//  pointlight_ptr->set_direction(0, 0, -1);
+//  pointlight_ptr->set_ls(1.1);
+  add_light(pointlight_ptr);
 //  tracer_ptr = new MultipleObjects(this);
 
   Grid* grid_ptr = new Grid;
@@ -114,29 +231,30 @@ World::buildMirror(void){
   phong_ptr3->set_kd(0.8);
 
 
-                                              //Mirror
-Reflective* reflect_ptr1 = new Reflective;
-reflect_ptr1->set_ka(.25);
-reflect_ptr1->set_kd(.5);
-reflect_ptr1->set_cd(.8,.8,.8);  //greyish
-reflect_ptr1->set_ks(.15);
-reflect_ptr1->set_exp(100);
-reflect_ptr1->set_kr(.75);
-reflect_ptr1->set_cr(1,1,1);  //reflect white
+                                                //Mirror
+  Reflective* reflect_ptr1 = new Reflective;
+  reflect_ptr1->set_ka(.25);
+  reflect_ptr1->set_kd(.5);
+  reflect_ptr1->set_cd(.8,.8,.8);  //greyish
+  reflect_ptr1->set_ks(.15);
+  reflect_ptr1->set_exp(100);
+  reflect_ptr1->set_kr(.75);
+  reflect_ptr1->set_cr(.375,.375,.375);  //reflect greyish
 
-                                              //Transparent
-Transparent* glass_ptr1 = new Transparent;
-glass_ptr1->set_ks(.9);
-glass_ptr1->set_exp(1000);
-glass_ptr1->set_ior(1);
-glass_ptr1->set_kr(.1);
-glass_ptr1->set_kt(.9);
+                                                //Transparent
+  Transparent* glass_ptr1 = new Transparent;
+  glass_ptr1->set_ks(.9);
+  glass_ptr1->set_exp(1000);
+  glass_ptr1->set_ior(1.1); //higher = more distortion (n)
+  glass_ptr1->set_kr(.1);
+  glass_ptr1->set_kt(.9);
+  phong_ptr2->set_cd(1,0,0);  //red
 
   //add sphere
   Sphere* sphere_ptr0 = new Sphere;
   sphere_ptr0->set_center(10, 10, 10);
   sphere_ptr0->set_radius(10.0);
-  sphere_ptr0->set_material(glass_ptr1);
+  sphere_ptr0->set_material(phong_ptr2);
 //  add_object(sphere_ptr);
   grid_ptr->add_object(sphere_ptr0);
 

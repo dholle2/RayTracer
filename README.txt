@@ -1,17 +1,29 @@
 
-Sphere Number:	30		100		200
+Rendered:		Trans	Reflect	 Area Light
 
-~Time Taken(s)	52 		102		179
+~Time Taken(s)	68 		48		179
+~Rays Used		90,000	90,000	90,000
 
-Mesh				Acc		No Acc
-					60-80	140-160
-~Time Taken(s)		
+I use C++ for this project.  All work was done on Linux machines at Siebel Center EWS labs.  Below are the hardware specs.
 
-I implemented a uniform grid using code and techniques from the book.  The grid stores each object and partitions itself into uniform cells, which the current ray traverses through to find occupied cells of the grid.  30 spheres took about 1.5 minutes on my machine, but the grid lowered that time significantly to about 52 seconds.  I ended my non accelerated simulations with many spheres after 3 minutes, but using acceleration kept even 200 spheres to under 3 minutes at 179 seconds.  
-As for the teapot, the time was about 60 seconds for the pictures included, but took over 5 minutes as I scaled up its size.  Different angles took different amounts of times too.  Of the pictures included, Mesh2 took longer, but only about 20 seconds more than Mesh1.  
-(The meshes are rotated very artistically, try tilting your head to the right).
+00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v2/Ivy Bridge DRAM Controller (rev 09)
+00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v2/3rd Gen Core processor PCI Express Root Port (rev 09)
+00:14.0 USB controller: Intel Corporation 7 Series/C210 Series Chipset Family USB xHCI Host Controller (rev 04)
+00:16.0 Communication controller: Intel Corporation 7 Series/C216 Chipset Family MEI Controller #1 (rev 04)
+00:16.3 Serial controller: Intel Corporation 7 Series/C210 Series Chipset Family KT Controller (rev 04)
+00:19.0 Ethernet controller: Intel Corporation 82579LM Gigabit Network Connection (Lewisville) (rev 04)
+00:1a.0 USB controller: Intel Corporation 7 Series/C216 Chipset Family USB Enhanced Host Controller #2 (rev 04)
+00:1b.0 Audio device: Intel Corporation 7 Series/C216 Chipset Family High Definition Audio Controller (rev 04)
+00:1d.0 USB controller: Intel Corporation 7 Series/C216 Chipset Family USB Enhanced Host Controller #1 (rev 04)
+00:1e.0 PCI bridge: Intel Corporation 82801 PCI Bridge (rev a4)
+00:1f.0 ISA bridge: Intel Corporation C216 Series Chipset LPC Controller (rev 04)
+00:1f.2 RAID bus controller: Intel Corporation SATA Controller [RAID mode] (rev 04)
+00:1f.3 SMBus: Intel Corporation 7 Series/C216 Chipset Family SMBus Controller (rev 04)
+01:00.0 VGA compatible controller: NVIDIA Corporation GK107GL [Quadro K600] (rev a1)
+01:00.1 Audio device: NVIDIA Corporation GK107 HDMI Audio Controller (rev a1)
 
-All of my were made using the book Ray Tracing from the Ground Up, either by directly downloading from the website or by implementing the code and practices described in the book.
+
+All of my files were made using the book Ray Tracing from the Ground Up, either by directly downloading from the website or by implementing the code and practices described in the book.
 
 Misc.
 
@@ -22,6 +34,8 @@ Pinhole			http://www.raytracegroundup.com/index.html
 RayCast			http://www.raytracegroundup.com/index.html
 Sampler			http://www.raytracegroundup.com/index.html
 Tracer			http://www.raytracegroundup.com/index.html
+Whitted			http://www.raytracegroundup.com/index.html
+AreaLighting	http://www.raytracegroundup.com/index.html
 
 SceneObjects
 
@@ -39,6 +53,9 @@ Sphere			http://www.raytracegroundup.com/index.html
 Triangle		http://www.raytracegroundup.com/index.html
 Triangle		http://www.raytracegroundup.com/index.html
 Viewplane		http://www.raytracegroundup.com/index.html
+AreaLight		http://www.raytracegroundup.com/index.html
+Rectangle		http://www.raytracegroundup.com/index.html
+
 
 Utilities
 
@@ -60,3 +77,4 @@ Ray				http://www.raytracegroundup.com/index.html
 RGBColor		http://www.raytracegroundup.com/index.html
 ShadeRec		http://www.raytracegroundup.com/index.html
 Vector3D		http://www.raytracegroundup.com/index.html
+Emissive		http://www.raytracegroundup.com/index.html

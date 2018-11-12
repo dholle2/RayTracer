@@ -2,12 +2,13 @@
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
+#include <iostream>
+using namespace std;
 
-/*
 #include "AreaLighting.h"
-#include "World.h"
-#include "ShadeRec.h"
-#include "Material.h"
+#include "../SceneObjects/World.h"
+#include "../Utilities/ShadeRec.h"
+#include "../Utilities/Material.h"
 
 // -------------------------------------------------------------------- default constructor
 
@@ -34,21 +35,21 @@ AreaLighting::~AreaLighting(void) {}
 // transmitted ray directions, and for rendering single sided emissive materials with area lights
 
 RGBColor
-AreaLighting::trace_ray(const Ray ray, const int depth) const {
-	if (depth > world_ptr->vp.max_depth)
+AreaLighting::trace_ray(const Ray ray, const int depth) {
+	if (depth > world_ptr->vp.max_depth){
 		return (black);
+	}
 	else {
 		ShadeRec sr(world_ptr->hit_objects(ray));
 
 		if (sr.hit_an_object) {
-			sr.depth = depth;brdf
+			sr.depth = depth;
 			sr.ray = ray;
-
+//			cout << "HIT" << endl;
 			return (sr.material_ptr->area_light_shade(sr));
 		}
-		else
+		else{
 			return (world_ptr->background_color);
+		}
 	}
 }
-
-*/

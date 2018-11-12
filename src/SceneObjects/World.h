@@ -57,6 +57,9 @@ class World{
     buildMirror(void);
 
     void
+    buildAreaLight(void);
+
+    void
     buildMesh(void);
 
     void

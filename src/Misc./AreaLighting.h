@@ -1,4 +1,4 @@
-/*
+
 #ifndef __AREA_LIGHTING__
 #define __AREA_LIGHTING__
 
@@ -22,10 +22,8 @@ class AreaLighting: public Tracer {
 		~AreaLighting(void);
 
 		virtual RGBColor
-		trace_ray(const Ray ray, const int depth) const;
+		trace_ray(const Ray ray, const int depth);
 
 };
 
 #endif
-
-*/

@@ -43,10 +43,16 @@ cout << "did perspective, sir!" << endl;
   cout << "did camera, sir!" << endl;
   cout << "seconds: " << difftime(after, before) << endl;
 */
+
 World w5;
-w5.buildMirror();
-w5.camera_ptr->render_scene(w5, "Mirror");
+w5.buildAreaLight();
+time_t before;
+time(&before);
+w5.camera_ptr->render_scene(w5, "Area Light");
+time_t after;
+time(&after);
 cout << "did camera, sir!" << endl;
+cout << "seconds: " << difftime(after, before) << endl;
 
 return 0;
 
