@@ -1,7 +1,7 @@
 
 Rendered:		Trans	Reflect	 Area Light
 
-~Time Taken(s)	68 		48		179
+~Time Taken(s)	68 		48		116
 ~Rays Used		90,000	90,000	90,000
 
 I use C++ for this project.  All work was done on Linux machines at Siebel Center EWS labs.  Below are the hardware specs.

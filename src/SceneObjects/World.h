@@ -48,6 +48,9 @@ class World{
     hit_objects(const Ray& ray);
 
     void
+    buildProceduralTexture(void);
+
+    void
     buildDiffuse(void);
 
     void

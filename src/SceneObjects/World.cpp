@@ -25,6 +25,10 @@
 #include "GeometricObject.h"
 #include "../Utilities/Reflective.h"
 #include "../Utilities/Phong.h"
+#include "../Utilities/SV_Matte.h"
+#include "../Utilities/PlaneChecker.h"
+#include "../Utilities/ConstantColor.h"
+
 #include "../Utilities/PerfectSpecular.h"
 #include "../Utilities/Emissive.h"
 #include "../Utilities/Transparent.h"
@@ -87,6 +91,89 @@ World::World(){
   pinhole_ptr->compute_uvw();
   set_camera(pinhole_ptr);
 }
+
+void
+World::buildProceduralTexture(void){
+  Grid* grid_ptr = new Grid;
+  tracer_ptr = new Whitted(this);
+
+int num_samples = 60;     //samples to use for the sampling
+
+Multijittered* sampler_ptr = new Multijittered(num_samples);
+AmbientOccluder* ambient_ptr = new AmbientOccluder;
+ambient_ptr->scale_radiance(1);
+ambient_ptr->set_sampler(sampler_ptr);
+set_ambient_light(ambient_ptr);
+PointLight* pointlight_ptr = new PointLight(-5,-5,10);
+pointlight_ptr->scale_radiance(2);
+add_light(pointlight_ptr);
+
+
+vp.set_hres(300);
+vp.set_vres(300);
+vp.set_s(1.2);
+vp.set_gamma(1.0);
+pixels.resize(vp.hres * vp.vres); //resize pixels array again
+vp.set_sampler(sampler_ptr);
+vp.set_max_depth(15);
+
+PlaneChecker* planeChecker1 = new PlaneChecker();
+RGBColor* color2 = new RGBColor(0, 0, 0);
+RGBColor* color3 = new RGBColor(0, 1, 0);
+RGBColor* color4 = new RGBColor(1, 1, 1);
+planeChecker1->set_color(*color2, *color3, *color4);
+
+SV_Matte* sv_matte_ptr2 = new SV_Matte();
+//sv_matte_ptr1->set_ka(.45);
+sv_matte_ptr2->set_kd(.65);
+sv_matte_ptr2->set_cd(planeChecker1);
+/*
+SV_Matte* sv_matte_ptr3 = new SV_Matte();
+//sv_matte_ptr1->set_ka(.45);
+sv_matte_ptr3->set_kd(.65);
+sv_matte_ptr3->set_cd(constantColor);
+*/
+
+Reflective* reflect_ptr1 = new Reflective;
+reflect_ptr1->set_ka(.25);
+reflect_ptr1->set_kd(.5);
+reflect_ptr1->set_cd(.8,.8,.8);  //greyish
+reflect_ptr1->set_ks(.15);
+reflect_ptr1->set_exp(100);
+reflect_ptr1->set_kr(.75);
+reflect_ptr1->set_cr(.375,.375,.375);  //reflect greyish
+  //add sphere
+  Sphere* sphere_ptr0 = new Sphere;
+  sphere_ptr0->set_center(10, 10, 10);
+  sphere_ptr0->set_radius(10.0);
+  sphere_ptr0->set_material(sv_matte_ptr2);
+//  add_object(sphere_ptr);
+//  grid_ptr->add_object(sphere_ptr0);
+/*
+  Sphere* sphere_ptr1 = new Sphere;
+  sphere_ptr1->set_center(-15, 60, 10);
+  sphere_ptr1->set_radius(10.0);
+  sphere_ptr1->set_material(phong_ptr1);
+//  add_object(sphere_ptr);
+  grid_ptr->add_object(sphere_ptr1);
+*/
+  Sphere* sphere_ptr2 = new Sphere;
+  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_radius(30.0);
+  sphere_ptr2->set_material(sv_matte_ptr2);
+  grid_ptr->add_object(sphere_ptr2);
+
+  Sphere* sphere_ptr3 = new Sphere;
+  sphere_ptr3->set_center(50, -15, 40);
+  sphere_ptr3->set_radius(30.0);
+  sphere_ptr3->set_material(reflect_ptr1);
+  grid_ptr->add_object(sphere_ptr3);
+
+//call after grid is done being added to
+  grid_ptr->setup_cells();
+  add_object(grid_ptr);
+
+} //end reflective
 
 void
 World::buildAreaLight(void){
@@ -191,7 +278,7 @@ vp.set_max_depth(15);
   grid_ptr->setup_cells();
   add_object(grid_ptr);
 
-} //end reflective
+} //end Area Light
 
 
 void

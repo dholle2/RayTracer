@@ -43,12 +43,23 @@ cout << "did perspective, sir!" << endl;
   cout << "did camera, sir!" << endl;
   cout << "seconds: " << difftime(after, before) << endl;
 */
-
+/*
 World w5;
 w5.buildAreaLight();
 time_t before;
 time(&before);
 w5.camera_ptr->render_scene(w5, "Area Light");
+time_t after;
+time(&after);
+cout << "did camera, sir!" << endl;
+cout << "seconds: " << difftime(after, before) << endl;
+*/
+
+World w6;
+w6.buildProceduralTexture();
+time_t before;
+time(&before);
+w6.camera_ptr->render_scene(w6, "Procedural Texture");
 time_t after;
 time(&after);
 cout << "did camera, sir!" << endl;

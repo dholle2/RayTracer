@@ -534,7 +534,7 @@ Grid::read_obj_file(string file_name, const int triangle_type) {
 					mesh_ptr->vertex_faces.erase(mesh_ptr->vertex_faces.begin(), mesh_ptr->vertex_faces.end());
 		    }
 
-/*
+
 	typedef struct Vertex {
 	  float x,y,z;      // space coordinates
 	} Vertex;
