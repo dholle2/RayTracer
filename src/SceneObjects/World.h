@@ -48,6 +48,9 @@ class World{
     hit_objects(const Ray& ray);
 
     void
+    buildAnimationFrames(int offset);
+
+    void
     buildProceduralTexture(void);
 
     void

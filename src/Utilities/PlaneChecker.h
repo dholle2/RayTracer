@@ -26,7 +26,7 @@ set_size(float s);
 void
 set_outline_width(float w);
 
-virtual RGBColor&
+virtual RGBColor
 get_color(const ShadeRec& sr);
 
 private:

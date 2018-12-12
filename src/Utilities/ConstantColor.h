@@ -20,7 +20,7 @@ class ConstantColor: public Texture {
 void
 set_color(RGBColor& c);
 
-virtual RGBColor&
+virtual RGBColor
 get_color(const ShadeRec& sr);
 
 private:

@@ -23,7 +23,7 @@ ConstantColor::set_color(RGBColor& c){
 
 }
 
-RGBColor&
+RGBColor
 ConstantColor::get_color(const ShadeRec& sr){
   return color;
 

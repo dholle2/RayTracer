@@ -16,7 +16,7 @@ class Texture {
 		virtual Texture*
 	  clone(void) const;
 */
-virtual RGBColor&
+virtual RGBColor
 get_color(const ShadeRec& sr) = 0;
 
 };

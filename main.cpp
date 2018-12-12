@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <sstream>
 //using namespace std;
 int
 main(void){
@@ -55,16 +56,39 @@ cout << "did camera, sir!" << endl;
 cout << "seconds: " << difftime(after, before) << endl;
 */
 
-World w6;
-w6.buildProceduralTexture();
+
 time_t before;
 time(&before);
-w6.camera_ptr->render_scene(w6, "Procedural Texture");
+World* w6 = new World();
+w6->buildAnimationFrames(1);
+w6->camera_ptr->render_scene(*w6, "Cool");
+
+/*
+for(int x = 0; x < 10; x++){
+  World* w6 = new World();
+  w6->buildAnimationFrames(x);
+
+  string imgName = "Animation";
+  std::stringstream sstm;
+  sstm << imgName << x;
+  string result = sstm.str();
+
+  w6->camera_ptr->render_scene(*w6, result);
+  delete w6;
+}
+*/
 time_t after;
 time(&after);
-cout << "did camera, sir!" << endl;
+cout << "Image finished, sir!" << endl;
 cout << "seconds: " << difftime(after, before) << endl;
 
+/*
+int randNum;
+for(int x = 0; x < 100; x++){
+  randNum = rand()%(1-(-1) + 1) + (-1);
+  cout << randNum << endl;
+}
+*/
 return 0;
 
 }

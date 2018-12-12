@@ -6,7 +6,7 @@ using namespace std;
 
   PlaneChecker::PlaneChecker(void)
   {
-    outline_width = 0;
+    outline_width = .1;
     size = 5;
     color1 = RGBColor(1,1,1);
     color2 = RGBColor(0,0,0);
@@ -41,7 +41,7 @@ PlaneChecker::set_outline_width(float w){
   outline_width = w;
 }
 
-RGBColor&
+RGBColor
 PlaneChecker::get_color(const ShadeRec& sr){
 
   float x = sr.local_hit_point.x;
