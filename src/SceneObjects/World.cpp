@@ -203,11 +203,17 @@ reflect_ptr1->set_exp(100);
 reflect_ptr1->set_kr(.75);
 reflect_ptr1->set_cr(.375,.375,.375);  //reflect greyish
   //add sphere
-  Sphere* sphere_ptr0 = new Sphere;
-  sphere_ptr0->set_center(6, 18, 30);
-  sphere_ptr0->set_radius(10.0);
-  sphere_ptr0->set_material(matte_ptr3);
-  grid_ptr->add_object(sphere_ptr0);
+  Sphere* leftEar = new Sphere;
+  leftEar->set_center(6, 18, 30);
+  leftEar->set_radius(10.0);
+  leftEar->set_material(matte_ptr3);
+  //grid_ptr->add_object(sphere_ptr0);
+
+  Sphere* rightEar = new Sphere;
+  rightEar->set_center(-6, 31, 32);
+  rightEar->set_radius(10.0);
+  rightEar->set_material(matte_ptr3);
+  grid_ptr->add_object(rightEar);
 
   Sphere* sphere_ptr2 = new Sphere;
   sphere_ptr2->set_center(16, 40, 30);
