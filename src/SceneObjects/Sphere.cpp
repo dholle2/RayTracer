@@ -41,9 +41,15 @@ const double Sphere::kEpsilon = .001;
     radius = r;
   }
 
+  double
+  Sphere::get_radius(){
+    return radius;
+  }
 
-
-
+  Point3D
+  Sphere::get_center(){
+    return center;
+  }
 
   bool
   Sphere::hit(const Ray& ray, double& tmin, ShadeRec& sr) const {
@@ -53,7 +59,7 @@ const double Sphere::kEpsilon = .001;
 //    cout << radius << endl;
   	Vector3D	temp 	= ray.o - center;
   	double 		a 		= ray.d * ray.d;
-  	double 		b 		= 2.0 * temp * ray.d;
+  	double 		b 		= 2.0 * temp * ray.d;ray.o.x == sr.local_hit_point.x &&
   	double 		c 		= temp * temp - radius * radius;
   	double 		disc	= b * b - 4.0 * a * c;
 
@@ -87,6 +93,55 @@ const double Sphere::kEpsilon = .001;
         //  cout << "MISS!!" << endl;
   	return (false);
   }
+
+  bool
+  Sphere::hitTwice(const Ray& ray, double& tmin, ShadeRec& sr) const{
+    double 		t;
+  	Vector3D	temp 	= ray.o - center;
+  	double 		a 		= ray.d * ray.d;
+  	double 		b 		= 2.0 * temp * ray.d;
+  	double 		c 		= temp * temp - radius * radius;
+  	double 		disc	= b * b - 4.0 * a * c;
+
+  	if (disc < 0.0){
+  //              cout << "MISS!!" << endl;
+      return(false);
+    }
+  	else {
+  		double e = sqrt(disc);
+  		double denom = 2.0 * a;
+  		t = (-b - e) / denom;    // smaller root
+
+  		if (t > kEpsilon) {
+  			tmin = t;
+  			//sr.normal 	 = (temp + t * ray.d) / radius;
+  			//sr.local_hit_point = ray.o + t * ray.d;
+        Point3D hitOne = ray.o + t * ray.d;
+        Ray newRay = Ray(hitOne, ray.d);
+        if(ray.o.x == sr.local_hit_point.x && ray.o.y == sr.local_hit_point.y && ray.o.z == sr.local_hit_point.z){
+//          cout << "aHA! intersecting with wrong point!" << endl;
+        }
+        bool outHit = hit(newRay, tmin, sr);
+    //              cout << "HIT!!" << endl;
+  			return (true);
+  		}
+
+  		t = (-b + e) / denom;    // larger root
+
+  		if (t > kEpsilon) {
+        tmin = t;
+  			//sr.normal 	 = (temp + t * ray.d) / radius;
+  			//sr.local_hit_point = ray.o + t * ray.d;
+        Point3D hitOne = ray.o + t * ray.d;
+        Ray newRay = Ray(hitOne, ray.d);
+        bool outHit = hit(newRay, tmin, sr);
+    //              cout << "HIT!!" << endl;
+  			return (true);
+  		}
+  	}
+        //  cout << "MISS!!" << endl;
+  	return (false);
+  }//end hitTwice
 
   bool
   Sphere::shadow_hit(const Ray& ray, float& tmin){

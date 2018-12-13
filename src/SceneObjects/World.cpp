@@ -30,6 +30,7 @@
 #include "../Utilities/ConstantColor.h"
 #include "../Utilities/LinearNoise.h"
 #include "../Utilities/FBmTexture.h"
+#include "CSGSubtract.h"
 
 #include "../Utilities/PerfectSpecular.h"
 #include "../Utilities/Emissive.h"
@@ -96,6 +97,62 @@ World::World(){
   set_camera(pinhole_ptr);
 }
 
+
+void
+World::buildCSG(){
+  Grid* grid_ptr = new Grid;
+  tracer_ptr = new Whitted(this);
+    background_color = RGBColor(1,1,1);
+
+int num_samples = 60;     //samples to use for the sampling
+
+Multijittered* sampler_ptr = new Multijittered(num_samples);
+AmbientOccluder* ambient_ptr = new AmbientOccluder;
+ambient_ptr->scale_radiance(1);
+ambient_ptr->set_sampler(sampler_ptr);
+set_ambient_light(ambient_ptr);
+PointLight* pointlight_ptr = new PointLight(-5,-5,10);
+pointlight_ptr->scale_radiance(2);
+add_light(pointlight_ptr);
+
+vp.set_hres(300);
+vp.set_vres(300);
+vp.set_s(1.2);
+vp.set_gamma(1.0);
+pixels.resize(vp.hres * vp.vres); //resize pixels array again
+vp.set_sampler(sampler_ptr);
+vp.set_max_depth(15);
+
+Matte* matte_ptr1 = new Matte;
+matte_ptr1->set_ka(0.5);
+matte_ptr1->set_cd(0,1,0);  //green
+matte_ptr1->set_kd(0.8);
+
+Matte* matte_ptr2 = new Matte;
+matte_ptr2->set_ka(0.5);
+matte_ptr2->set_cd(0,0,1);  //blue
+matte_ptr2->set_kd(0.8);
+
+  Sphere* midEar = new Sphere;
+  midEar->set_center(3, 28, 15);
+  midEar->set_radius(10.0);
+  midEar->set_material(matte_ptr1);
+  grid_ptr->add_object(midEar);
+
+  Sphere* sphere_ptr2 = new Sphere;
+  sphere_ptr2->set_center(26, 45, 30);
+  sphere_ptr2->set_radius(30.0);
+  sphere_ptr2->set_material(matte_ptr2);
+  grid_ptr->add_object(sphere_ptr2);
+
+CSGSubtract* csg_ptr = new CSGSubtract();
+csg_ptr->add_object(sphere_ptr2);
+csg_ptr->add_object(midEar);
+
+//  grid_ptr->setup_cells();
+  add_object(csg_ptr);
+} //end buildCSG
+
 void
 World::buildAnimationFrames(int offset){
   Grid* grid_ptr = new Grid;
@@ -110,7 +167,95 @@ ambient_ptr->set_sampler(sampler_ptr);
 set_ambient_light(ambient_ptr);
 PointLight* pointlight_ptr = new PointLight(-5,-5,10);
 pointlight_ptr->scale_radiance(2);
-//add_light(pointlight_ptr);
+add_light(pointlight_ptr);
+
+
+vp.set_hres(300);
+vp.set_vres(300);
+vp.set_s(1.2);
+vp.set_gamma(1.0);
+pixels.resize(vp.hres * vp.vres); //resize pixels array again
+vp.set_sampler(sampler_ptr);
+vp.set_max_depth(15);
+
+PlaneChecker* planeChecker1 = new PlaneChecker();
+RGBColor* color2 = new RGBColor(0, 0, 0);
+RGBColor* color3 = new RGBColor(0, 1, 0);
+RGBColor* color4 = new RGBColor(1, 1, 1);
+planeChecker1->set_color(*color2, *color3, *color4);
+
+SV_Matte* sv_matte_ptr2 = new SV_Matte();
+//sv_matte_ptr1->set_ka(.45);
+sv_matte_ptr2->set_kd(.65);
+sv_matte_ptr2->set_cd(planeChecker1);
+/*
+SV_Matte* sv_matte_ptr3 = new SV_Matte();
+//sv_matte_ptr1->set_ka(.45);
+sv_matte_ptr3->set_kd(.65);
+sv_matte_ptr3->set_cd(constantColor);
+*/
+
+Reflective* reflect_ptr1 = new Reflective;
+reflect_ptr1->set_ka(.25);
+reflect_ptr1->set_kd(.5);
+reflect_ptr1->set_cd(.8,.8,.8);  //greyish
+reflect_ptr1->set_ks(.15);
+reflect_ptr1->set_exp(100);
+reflect_ptr1->set_kr(.75);
+reflect_ptr1->set_cr(.375,.375,.375);  //reflect greyish
+  //add sphere
+  Sphere* sphere_ptr0 = new Sphere;
+  sphere_ptr0->set_center(10, 10, 10);
+  sphere_ptr0->set_radius(10.0);
+  sphere_ptr0->set_material(sv_matte_ptr2);
+//  add_object(sphere_ptr);
+//  grid_ptr->add_object(sphere_ptr0);
+/*
+  Sphere* sphere_ptr1 = new Sphere;
+  sphere_ptr1->set_center(-15, 60, 10);
+  sphere_ptr1->set_radius(10.0);
+  sphere_ptr1->set_material(phong_ptr1);
+//  add_object(sphere_ptr);
+  grid_ptr->add_object(sphere_ptr1);
+*/
+  Sphere* sphere_ptr2 = new Sphere;
+  float offset4 = ((float) offset)/4;
+  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_radius(30.0 - offset4);
+  sphere_ptr2->set_material(sv_matte_ptr2);
+  grid_ptr->add_object(sphere_ptr2);
+
+  Sphere* sphere_ptr3 = new Sphere;
+  sphere_ptr3->set_center(50 , -15 , 40 );
+  sphere_ptr3->set_radius(30.0);
+  sphere_ptr3->set_material(reflect_ptr1);
+  grid_ptr->add_object(sphere_ptr3);
+
+//call after grid is done being added to
+  grid_ptr->setup_cells();
+  add_object(grid_ptr);
+
+} //end buildAnim
+
+
+
+
+void
+World::buildCool(){
+  Grid* grid_ptr = new Grid;
+  tracer_ptr = new Whitted(this);
+    background_color = RGBColor(1,1,1);
+
+int num_samples = 60;     //samples to use for the sampling
+
+Multijittered* sampler_ptr = new Multijittered(num_samples);
+AmbientOccluder* ambient_ptr = new AmbientOccluder;
+ambient_ptr->scale_radiance(1);
+ambient_ptr->set_sampler(sampler_ptr);
+set_ambient_light(ambient_ptr);
+PointLight* pointlight_ptr = new PointLight(-5,-5,10);
+pointlight_ptr->scale_radiance(2);
+add_light(pointlight_ptr);
 
 vp.set_hres(300);
 vp.set_vres(300);
@@ -145,26 +290,13 @@ y = randNum / 10;
 randNum = rand()%(1-(-1) + 1) + (-1);
 z = randNum / 10;
 RGBColor* color4 = new RGBColor(.1+x, .1+y, .1+z);
-/*
+
 planeChecker1->set_color(*color2, *color3, *color4);
 
 SV_Matte* sv_matte_ptr2 = new SV_Matte();
 //sv_matte_ptr1->set_ka(.45);
 sv_matte_ptr2->set_kd(.65);
 sv_matte_ptr2->set_cd(planeChecker1);
-*/
-LinearNoise* noise_ptr = new LinearNoise;
-noise_ptr->set_num_octaves(6);
-noise_ptr->set_gain(0.5);
-noise_ptr->set_lacunarity(8);
-//Transparent
-Transparent* glass_ptr1 = new Transparent;
-glass_ptr1->set_ks(.9);
-glass_ptr1->set_exp(1000);
-glass_ptr1->set_ior(1.1); //higher = more distortion (n)
-glass_ptr1->set_kr(.1);
-glass_ptr1->set_kt(.9);
-glass_ptr1->set_cr(1,0,0);  //red
 
 FBmTexture* fbm_texture_ptr = new FBmTexture();
 fbm_texture_ptr->set_noise(noise_ptr);
@@ -177,6 +309,47 @@ SV_Matte* sv_matte_ptr2 = new SV_Matte();
 //sv_matte_ptr1->set_ka(.45);
 sv_matte_ptr2->set_kd(.65);
 sv_matte_ptr2->set_cd(fbm_texture_ptr);
+
+*/
+LinearNoise* noise_ptr = new LinearNoise;
+noise_ptr->set_num_octaves(6);
+noise_ptr->set_gain(0.5);
+noise_ptr->set_lacunarity(8);
+//Transparent
+Transparent* glass_ptr1 = new Transparent;
+glass_ptr1->set_ks(.5);
+glass_ptr1->set_exp(1000);
+glass_ptr1->set_ior(1); //higher = more distortion (n)
+glass_ptr1->set_kr(.5);
+glass_ptr1->set_kt(.9);
+glass_ptr1->set_cr(1,0,0);  //red
+
+Transparent* glass_ptr2 = new Transparent;
+glass_ptr2->set_ks(.5);
+glass_ptr2->set_exp(2000);
+glass_ptr2->set_ior(1); //higher = more distortion (n)
+glass_ptr2->set_kr(.1);
+glass_ptr2->set_kt(.9);
+glass_ptr2->set_cr(.5,0,0);  //red
+
+Transparent* glass_ptr3 = new Transparent;
+glass_ptr3->set_ks(.5);
+glass_ptr3->set_exp(2000);
+glass_ptr3->set_ior(1.0); //higher = more distortion (n)
+glass_ptr3->set_kr(.1);
+glass_ptr3->set_kt(.9);
+glass_ptr3->set_cr(.8,0,0);  //red
+
+PlaneChecker* planeChecker1 = new PlaneChecker();
+RGBColor* color2 = new RGBColor(1, 0, 0);
+RGBColor* color3 = new RGBColor(0, 0, 1);
+RGBColor* color4 = new RGBColor(1,1,1);
+planeChecker1->set_color(*color2, *color3, *color4);
+
+SV_Matte* sv_matte_ptr2 = new SV_Matte();
+//sv_matte_ptr1->set_ka(.45);
+sv_matte_ptr2->set_kd(.65);
+sv_matte_ptr2->set_cd(planeChecker1);
 
 Matte* matte_ptr1 = new Matte;
 matte_ptr1->set_ka(0.5);
@@ -206,25 +379,31 @@ reflect_ptr1->set_cr(.375,.375,.375);  //reflect greyish
   Sphere* leftEar = new Sphere;
   leftEar->set_center(6, 18, 30);
   leftEar->set_radius(10.0);
-  leftEar->set_material(matte_ptr3);
-  //grid_ptr->add_object(sphere_ptr0);
+  leftEar->set_material(glass_ptr1);
+  grid_ptr->add_object(leftEar);
 
   Sphere* rightEar = new Sphere;
   rightEar->set_center(-6, 31, 32);
   rightEar->set_radius(10.0);
-  rightEar->set_material(matte_ptr3);
+  rightEar->set_material(glass_ptr1);
   grid_ptr->add_object(rightEar);
 
+  Sphere* midEar = new Sphere;
+  midEar->set_center(3, 28, 15);
+  midEar->set_radius(10.0);
+  midEar->set_material(glass_ptr2);
+  grid_ptr->add_object(midEar);
+
   Sphere* sphere_ptr2 = new Sphere;
-  sphere_ptr2->set_center(16, 40, 30);
+  sphere_ptr2->set_center(26, 45, 30);
   sphere_ptr2->set_radius(30.0);
-  sphere_ptr2->set_material(matte_ptr2);
+  sphere_ptr2->set_material(sv_matte_ptr2);
   grid_ptr->add_object(sphere_ptr2);
 
   Sphere* sphere_ptr1 = new Sphere;
   sphere_ptr1->set_center(5, 10, 5);
   sphere_ptr1->set_radius(10.0);
-  sphere_ptr1->set_material(glass_ptr1);
+  sphere_ptr1->set_material(glass_ptr3);
 //  grid_ptr->add_object(sphere_ptr1);
 
   Sphere* sphere_ptr3 = new Sphere;

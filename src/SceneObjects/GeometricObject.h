@@ -44,6 +44,15 @@ class GeometricObject{
     virtual bool
     hit(const Ray& ray, double& t, ShadeRec& s) const;
 
+    virtual bool
+    hitTwice(const Ray& ray, double& tmin, ShadeRec& sr) const;
+
+    virtual double
+    get_radius();
+
+    virtual Point3D
+		get_center();
+
     void
     set_color(float x, float y, float z);
 

@@ -48,6 +48,12 @@ class World{
     hit_objects(const Ray& ray);
 
     void
+    buildCool();
+
+    void
+    buildCSG();
+
+    void
     buildAnimationFrames(int offset);
 
     void

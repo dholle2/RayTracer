@@ -1,8 +1,9 @@
 
-Rendered:		Trans	Reflect	 Area Light
+Rendered:		Procedural	Noise	 CSG	Anim			Mickey
 
-~Time Taken(s)	68 		48		116
-~Rays Used		90,000	90,000	90,000
+~Time Taken(s)	80			120				~2.5 hours		240
+
+~90,000 rays used for each scene
 
 I use C++ for this project.  All work was done on Linux machines at Siebel Center EWS labs.  Below are the hardware specs.
 
@@ -23,7 +24,7 @@ I use C++ for this project.  All work was done on Linux machines at Siebel Cente
 01:00.1 Audio device: NVIDIA Corporation GK107 HDMI Audio Controller (rev a1)
 
 
-All of my files were made using the book Ray Tracing from the Ground Up, either by directly downloading from the website or by implementing the code and practices described in the book.
+Most of my files were made using the book Ray Tracing from the Ground Up, either by directly downloading from the website or by implementing the code and practices described in the book.
 
 Misc.
 
